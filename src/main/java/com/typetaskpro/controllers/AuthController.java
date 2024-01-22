@@ -50,11 +50,12 @@ public class AuthController {
 
   @PostMapping("/register")
   public ResponseEntity<Void> register(@RequestBody @Valid UserRegisterDTO req) {
-    // TODO: adicionar verificação de senha
-    if(userRepository.findByUsername(req.username()) != null) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    
+    if(userRepository.findByUsername(req.username()) != null) {
+      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
 
     String encryptedPassword = passwordEncoder.encode(req.password());
-
     userRepository.save(new User(req.username(), encryptedPassword, req.role()));
 
     return ResponseEntity.status(HttpStatus.CREATED).build();

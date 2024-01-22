@@ -52,7 +52,6 @@ public class User implements UserDetails{
   @EqualsAndHashCode.Exclude
   private String password;
 
-  @Column(nullable = false)
   @EqualsAndHashCode.Exclude
   private UserRole role;
 
