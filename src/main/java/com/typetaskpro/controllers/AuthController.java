@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.typetaskpro.config.security.TokenService;
-import com.typetaskpro.domain.user.dto.LoginResponseDTO;
+import com.typetaskpro.domain.user.dto.TokenResponseDTO;
 import com.typetaskpro.domain.user.dto.UserLoginDTO;
 import com.typetaskpro.domain.user.dto.UserRegisterDTO;
 import com.typetaskpro.domain.user.model.User;
@@ -39,14 +39,14 @@ public class AuthController {
   TokenService tokenService;
 
   @PostMapping("/login")
-  public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid UserLoginDTO req) {
+  public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid UserLoginDTO req) {
 
     var usernamePassword = new UsernamePasswordAuthenticationToken(req.username(), req.password());
     Authentication auth = authenticationManager.authenticate(usernamePassword);
 
     var token = tokenService.generateToken((User) auth.getPrincipal());
 
-    return ResponseEntity.ok(new LoginResponseDTO(token));
+    return ResponseEntity.ok(new TokenResponseDTO(token));
   }
 
   @PostMapping("/register")

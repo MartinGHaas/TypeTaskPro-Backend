@@ -31,17 +31,17 @@ public class SecurityFilter extends OncePerRequestFilter {
     throws IOException, ServletException{
     
     var token = recoverToken(request);
+
     if(token != null) {
       var login = tokenService.validateToken(token);
       UserDetails user = userRepository.findByUsername(login);
-
+      
       var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     filterChain.doFilter(request, response);
   }
-
 
   private String recoverToken(HttpServletRequest request) {
     var authHeader = request.getHeader("Authorization");
