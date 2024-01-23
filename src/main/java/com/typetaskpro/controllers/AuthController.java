@@ -17,6 +17,7 @@ import com.typetaskpro.domain.user.dto.LoginResponseDTO;
 import com.typetaskpro.domain.user.dto.UserLoginDTO;
 import com.typetaskpro.domain.user.dto.UserRegisterDTO;
 import com.typetaskpro.domain.user.model.User;
+import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
 
 import jakarta.validation.Valid;
@@ -56,7 +57,9 @@ public class AuthController {
     }
 
     String encryptedPassword = passwordEncoder.encode(req.password());
-    userRepository.save(new User(req.username(), encryptedPassword, req.role()));
+    
+    UserRole role = req.role();
+    userRepository.save(new User(req.username(), encryptedPassword, role == null ? UserRole.USER : role));
 
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
