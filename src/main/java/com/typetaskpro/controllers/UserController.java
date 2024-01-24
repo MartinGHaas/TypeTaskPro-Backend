@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +23,7 @@ import com.typetaskpro.domain.user.dto.UserResponseDTO;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
+import com.typetaskpro.services.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -38,6 +37,9 @@ public class UserController {
 
   @Autowired
   TokenService tokenService;
+
+  @Autowired
+  UserService userService;
 
   @GetMapping
   public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -57,7 +59,6 @@ public class UserController {
     if(!optionalUser.isPresent()) return ResponseEntity.notFound().build();
     
     User user = optionalUser.get();
-
     return ResponseEntity.ok(new UserResponseDTO(id, user.getUsername()));
   }
 
@@ -74,27 +75,34 @@ public class UserController {
 
     User validUser = optionalUser.get();
 
-    if(user instanceof User) {
-      
-      boolean isAdmin = ((User) user).getRole() == UserRole.ADMIN;
-      boolean isUserEquals = validUser.equals(user);
-  
-      if(!isAdmin && !isUserEquals) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-      }
+    if(!isAuthorizedToUpdate(validUser, user)) {  
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    if(userRepository.findByUsername(req.username()) != null) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    if(userService.usernameAlreadyExists(req.username())) { 
+      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
 
     validUser.setUsername(req.username());
 
     userRepository.save(validUser);
 
-    var usernamePassword = new UsernamePasswordAuthenticationToken(validUser.getUsername(), validUser.getPassword());
-    Authentication auth = authenticationManager.authenticate(usernamePassword);
+    return ResponseEntity.ok(
+      userService.validateAndReturnNewToken(
+        validUser.getUsername(), validUser.getPassword()
+      )
+    );
+  }
 
-    var token = tokenService.generateToken((User) auth.getPrincipal());
+  private boolean isAuthorizedToUpdate(User user, UserDetails userDetails) {
+    if(userDetails instanceof User) {
+      
+      boolean isAdmin = ((User) userDetails).getRole() == UserRole.ADMIN;
+      boolean isUserEquals = user.equals(userDetails);
 
-    return ResponseEntity.ok(new TokenResponseDTO(token));
+      return isAdmin || isUserEquals;
+    }
+    
+    return false;
   }
 }

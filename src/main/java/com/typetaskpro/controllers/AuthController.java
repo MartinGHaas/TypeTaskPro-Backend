@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +17,7 @@ import com.typetaskpro.domain.user.dto.UserRegisterDTO;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
+import com.typetaskpro.services.UserService;
 
 import jakarta.validation.Valid;
 
@@ -38,15 +37,18 @@ public class AuthController {
   @Autowired
   TokenService tokenService;
 
+  @Autowired
+  UserService userService;
+
   @PostMapping("/login")
   public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid UserLoginDTO req) {
-
-    var usernamePassword = new UsernamePasswordAuthenticationToken(req.username(), req.password());
-    Authentication auth = authenticationManager.authenticate(usernamePassword);
-
-    var token = tokenService.generateToken((User) auth.getPrincipal());
-
-    return ResponseEntity.ok(new TokenResponseDTO(token));
+    
+    return ResponseEntity.ok(
+      userService.validateAndReturnNewToken(
+        req.username(),
+        req.password()
+      )
+    );
   }
 
   @PostMapping("/register")
