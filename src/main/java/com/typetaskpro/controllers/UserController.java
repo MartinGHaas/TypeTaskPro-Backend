@@ -68,36 +68,24 @@ public class UserController {
     Optional<User> optionalUser = userRepository.findById(id);
     if(!optionalUser.isPresent()) return ResponseEntity.badRequest().build();
     User validUser = optionalUser.get();
-
-    if(!isAuthorizedToUpdate(validUser, user)) {
+    
+    boolean isAdmin = ((User) user).getRole() == UserRole.ADMIN;
+    boolean isUserEquals = validUser.equals(user);
+    if(!(isAdmin || isUserEquals))
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
 
-    if(userService.usernameAlreadyExists(req.username())) { 
+    if(userService.usernameAlreadyExists(req.username()))
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
 
     validUser.setUsername(req.username());
     userRepository.save(validUser);
 
-    if(validUser.equals(user)) {
+    if(isUserEquals) {
       return ResponseEntity.ok(
         new TokenResponseDTO(tokenService.generateToken(validUser))
       );
     }
 
     return ResponseEntity.ok().build();
-  }
-
-  private boolean isAuthorizedToUpdate(User user, UserDetails userDetails) {
-    if(userDetails instanceof User) {
-      
-      boolean isAdmin = ((User) userDetails).getRole() == UserRole.ADMIN;
-      boolean isUserEquals = user.equals(userDetails);
-
-      return isAdmin || isUserEquals;
-    }
-
-    return false;
   }
 }
