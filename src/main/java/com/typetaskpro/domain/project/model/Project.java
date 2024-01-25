@@ -1,5 +1,6 @@
 package com.typetaskpro.domain.project.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.typetaskpro.domain.device.model.Device;
@@ -7,7 +8,6 @@ import com.typetaskpro.domain.user.model.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,9 +51,7 @@ public class Project {
   )
   private String name;
 
-  @ManyToOne(
-    fetch = FetchType.EAGER
-  )
+  @ManyToOne
   @JoinColumn(
     name = "device"
   )
@@ -68,4 +66,14 @@ public class Project {
     mappedBy = "contributingProjects"
   )
   private List<User> contributors;
+
+  public Project(String name, Device device, User user) {
+    this.name = name;
+    this.device = device;
+    this.administrators = new ArrayList<>();
+    this.contributors = new ArrayList<>();
+
+    this.administrators.add(user);
+    this.contributors.add(user);
+  }
 }

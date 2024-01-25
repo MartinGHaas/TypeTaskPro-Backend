@@ -10,4 +10,6 @@ import com.typetaskpro.domain.user.model.User;
 public interface UserRepository extends JpaRepository<User, Long>{
   
   UserDetails findByUsername(String username);
+
+  User findUserByUsername(String username);
 }

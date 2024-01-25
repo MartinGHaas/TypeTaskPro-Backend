@@ -1,5 +1,6 @@
 package com.typetaskpro.domain.user.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.typetaskpro.domain.project.model.Project;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -62,7 +64,7 @@ public class User implements UserDetails{
   @EqualsAndHashCode.Exclude
   private UserRole role;
 
-  @ManyToMany(targetEntity = Project.class)
+  @ManyToMany(targetEntity = Project.class, fetch = FetchType.EAGER)
   @JoinTable(
     name = "user_administrating_projects",
     joinColumns = {
@@ -74,7 +76,7 @@ public class User implements UserDetails{
   )
   private List<Project> administratingProjects;
   
-  @ManyToMany(targetEntity = Project.class)
+  @ManyToMany(targetEntity = Project.class, fetch = FetchType.EAGER)
   @JoinTable(
     name = "user_contributing_projects",
     joinColumns = {
@@ -90,6 +92,8 @@ public class User implements UserDetails{
     this.username = username;
     this.password = password;
     this.role = role;
+    this.administratingProjects = new ArrayList<>();
+    this.contributingProjects = new ArrayList<>();
   }
 
   @Override
