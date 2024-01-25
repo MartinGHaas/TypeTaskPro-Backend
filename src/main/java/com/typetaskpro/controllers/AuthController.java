@@ -3,14 +3,12 @@ package com.typetaskpro.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.typetaskpro.config.security.TokenService;
 import com.typetaskpro.domain.user.dto.TokenResponseDTO;
 import com.typetaskpro.domain.user.dto.UserLoginDTO;
 import com.typetaskpro.domain.user.dto.UserRegisterDTO;
@@ -30,12 +28,6 @@ public class AuthController {
 
   @Autowired
   PasswordEncoder passwordEncoder;
-
-  @Autowired
-  AuthenticationManager authenticationManager;
-
-  @Autowired
-  TokenService tokenService;
 
   @Autowired
   UserService userService;

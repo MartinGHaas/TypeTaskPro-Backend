@@ -7,11 +7,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.typetaskpro.domain.project.model.Project;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -56,6 +61,30 @@ public class User implements UserDetails{
 
   @EqualsAndHashCode.Exclude
   private UserRole role;
+
+  @ManyToMany(targetEntity = Project.class)
+  @JoinTable(
+    name = "user_administrating_projects",
+    joinColumns = {
+      @JoinColumn(name = "project_id")
+    },
+    inverseJoinColumns = {
+      @JoinColumn(name = "user_id")
+    }
+  )
+  private List<Project> administratingProjects;
+  
+  @ManyToMany(targetEntity = Project.class)
+  @JoinTable(
+    name = "user_contributing_projects",
+    joinColumns = {
+      @JoinColumn(name = "project_id")
+    },
+    inverseJoinColumns = {
+      @JoinColumn(name = "user_id")
+    }
+  )
+  private List<Project> contributingProjects;
 
   public User(String username, String password, UserRole role) {
     this.username = username;
