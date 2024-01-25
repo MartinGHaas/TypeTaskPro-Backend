@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import com.typetaskpro.repository.DeviceRepository;
 import com.typetaskpro.repository.ProjectRepository;
 import com.typetaskpro.repository.UserRepository;
 import com.typetaskpro.services.ProjectService;
+import com.typetaskpro.services.UserService;
 
 import jakarta.validation.Valid;
 
@@ -43,6 +46,9 @@ public class ProjectController {
 
   @Autowired
   DeviceRepository deviceRepository;
+
+  @Autowired
+  UserService userService;
 
   @GetMapping
   public ResponseEntity<List<ProjectResponseDTO>> getAllProjects(
@@ -95,5 +101,23 @@ public class ProjectController {
     userRepository.save(user);    
     
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @DeleteMapping("/id")
+  public ResponseEntity<Void> deleteProject(
+    @PathVariable long id,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    
+    Optional<Project> project = projectRepository.findById(id);
+
+    if(!project.isPresent()) return ResponseEntity.badRequest().build();
+
+    User user = (User) userDetails;
+
+    if(userService.isAdministrator(user) || user.equals(projectService.getProjectOwner(project.get())))
+      return ResponseEntity.ok().build();
+
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
   }
 }

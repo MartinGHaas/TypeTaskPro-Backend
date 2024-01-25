@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.typetaskpro.config.security.TokenService;
 import com.typetaskpro.domain.user.dto.TokenResponseDTO;
 import com.typetaskpro.domain.user.model.User;
+import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
 
 @Service
@@ -35,5 +36,9 @@ public class UserService {
     var token = tokenService.generateToken((User) auth.getPrincipal());
 
     return new TokenResponseDTO(token);
+  }
+
+  public boolean isAdministrator(User user) {
+    return user.getRole() == UserRole.ADMIN;
   }
 }
