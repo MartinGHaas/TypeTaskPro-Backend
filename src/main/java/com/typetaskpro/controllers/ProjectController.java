@@ -1,9 +1,7 @@
 package com.typetaskpro.controllers;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.domain.device.model.Device;
 import com.typetaskpro.domain.project.dto.ProjectRequestDTO;
@@ -144,20 +143,25 @@ public class ProjectController {
     req.name().ifPresent(project::setName);
     req.device().ifPresent(device -> project.setDevice(deviceService.validateAndSaveDevice(device)));
 
-    Set<User> contributors = new HashSet<>();
-    Set<User> administrators = new HashSet<>();
+    try {
+      req.newContributors().ifPresent(contributorsId ->
+        projectService.addContributors(project, userService.getUsersFromId(contributorsId))
+      );
+      req.newAdministrators().ifPresent(administratorsId -> 
+        projectService.addAdministrators(project, userService.getUsersFromId(administratorsId))
+      );
+      
+      req.removeContributors().ifPresent(contributorsId -> 
+        projectService.removeContributors(project, userService.getUsersFromId(contributorsId))
+      );
+      req.removeAdministrators().ifPresent(administratorsId -> 
+        projectService.removeContributors(project, userService.getUsersFromId(administratorsId))
+      );
+      
+    } catch(ResponseStatusException responseStatusException) {
+      return ResponseEntity.badRequest().build();
+    }
 
-    req.contributors().ifPresent(contributorsId -> 
-      contributors.addAll(userService.getUsersFromId(contributorsId))
-    );
-    req.administrators().ifPresent(administratorsId -> {
-        contributors.addAll(userService.getUsersFromId(administratorsId));
-        administrators.addAll(userService.getUsersFromId(administratorsId));
-      }
-    );
-
-    project.setContributors(contributors);
-    project.setAdministrators(administrators);
     projectRepository.save(project);
     
     return ResponseEntity.ok().build();

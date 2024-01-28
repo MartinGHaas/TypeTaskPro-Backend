@@ -8,6 +8,8 @@ import com.typetaskpro.domain.device.dto.DeviceRequestDTO;
 public record ProjectUpdateRequestDTO(
   Optional<String> name,
   Optional<DeviceRequestDTO> device,
-  Optional<List<Long>> contributors,
-  Optional<List<Long>> administrators
+  Optional<List<Long>> newContributors,
+  Optional<List<Long>> newAdministrators,
+  Optional<List<Long>> removeContributors,
+  Optional<List<Long>> removeAdministrators
 ) {}

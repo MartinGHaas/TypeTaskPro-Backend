@@ -19,6 +19,28 @@ public class ProjectService {
   @Autowired
   ProjectRepository projectRepository;
 
+  public void addContributors(Project project, Set<User> users) {
+    project.getContributors().addAll(users);
+  }
+
+  public void addAdministrators(Project project, Set<User> users) {
+    project.getContributors().addAll(users);
+    project.getAdministrators().addAll(users);
+  }
+
+  public void removeContributors(Project project, Set<User> users) {
+    for(User user : users) {
+      project.getContributors().remove(user);
+    }
+  }
+
+  public void removeAdministrators(Project project, Set<User> users) {
+    for(User user : users) {
+      project.getContributors().remove(user);
+      project.getAdministrators().remove(user);
+    }
+  }
+
   public List<ProjectResponseDTO> getProjectPublicDTO(List<Project> projects) {
     return projects.stream().map(project -> 
       new ProjectResponseDTO(

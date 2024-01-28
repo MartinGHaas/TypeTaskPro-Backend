@@ -1,7 +1,8 @@
 package com.typetaskpro.services;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,11 @@ public class UserService {
     return userRepository.findByUsername(username) != null;
   }
 
-  public List<User> getUsersFromId(List<Long> userIds) {
-    return userIds.stream()
-    .map(userId -> userRepository.findById(userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST))
-    )
-    .filter(Objects::nonNull)
-    .toList();
+  public Set<User> getUsersFromId(List<Long> userIds) {
+    if(userIds != null && !userIds.contains(null))
+      return new HashSet<>(userRepository.findAllById(userIds));
+
+    throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
   }
 
   public TokenResponseDTO validateAndReturnNewToken(String username, String password) {
