@@ -18,10 +18,6 @@ public class ProjectService {
   @Autowired
   ProjectRepository projectRepository;
 
-  public User getProjectOwner(Project project) {
-    return project.getAdministrators().get(0);
-  }
-
   public List<ProjectResponseDTO> getProjectPublicDTO(List<Project> projects) {
     return projects.stream().map(project -> 
       new ProjectResponseDTO(

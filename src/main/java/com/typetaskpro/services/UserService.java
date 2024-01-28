@@ -1,10 +1,15 @@
 package com.typetaskpro.services;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.config.security.TokenService;
 import com.typetaskpro.domain.user.dto.TokenResponseDTO;
@@ -26,6 +31,15 @@ public class UserService {
   
   public boolean usernameAlreadyExists(String username) {
     return userRepository.findByUsername(username) != null;
+  }
+
+  public List<User> getUsersFromId(List<Long> userIds) {
+    return userIds.stream()
+    .map(userId -> userRepository.findById(userId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST))
+    )
+    .filter(Objects::nonNull)
+    .toList();
   }
 
   public TokenResponseDTO validateAndReturnNewToken(String username, String password) {

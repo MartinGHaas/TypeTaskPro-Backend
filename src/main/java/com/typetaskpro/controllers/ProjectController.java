@@ -1,7 +1,10 @@
 package com.typetaskpro.controllers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.typetaskpro.domain.device.model.Device;
 import com.typetaskpro.domain.project.dto.ProjectRequestDTO;
 import com.typetaskpro.domain.project.dto.ProjectResponseDTO;
+import com.typetaskpro.domain.project.dto.ProjectUpdateRequestDTO;
 import com.typetaskpro.domain.project.model.Project;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.DeviceRepository;
 import com.typetaskpro.repository.ProjectRepository;
 import com.typetaskpro.repository.UserRepository;
+import com.typetaskpro.services.DeviceService;
+import com.typetaskpro.services.ProjectAdministrationService;
 import com.typetaskpro.services.ProjectService;
 import com.typetaskpro.services.UserService;
 
@@ -49,6 +56,12 @@ public class ProjectController {
 
   @Autowired
   UserService userService;
+
+  @Autowired
+  ProjectAdministrationService projectAdministrationService;
+
+  @Autowired
+  DeviceService deviceService;
 
   @GetMapping
   public ResponseEntity<List<ProjectResponseDTO>> getAllProjects(
@@ -79,31 +92,18 @@ public class ProjectController {
     @RequestBody @Valid ProjectRequestDTO req,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
-    User user = userRepository.findUserByUsername(userDetails.getUsername());
-    
-    Optional<Device> optionalDevice = deviceRepository.findByName(req.device().name());
 
-    Device validDevice;
-    if(!optionalDevice.isPresent()) {
-      validDevice = new Device(req.device().name());
-      deviceRepository.save(validDevice);
-    } else {
-      // WTF ELSE ????????????????????????
-      validDevice = optionalDevice.get();
-    }
+    User user = userRepository.findUserByUsername(userDetails.getUsername());
+    Device validDevice = deviceService.validateAndSaveDevice(req.device());
 
     Project project = new Project(req.name(), validDevice, user);
 
     projectRepository.save(project);
-
-    user.getAdministratingProjects().add(project);
-    user.getContributingProjects().add(project);
-    userRepository.save(user);    
     
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }
 
-  @DeleteMapping("/id")
+  @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteProject(
     @PathVariable long id,
     @AuthenticationPrincipal UserDetails userDetails
@@ -115,9 +115,53 @@ public class ProjectController {
 
     User user = (User) userDetails;
 
-    if(userService.isAdministrator(user) || user.equals(projectService.getProjectOwner(project.get())))
+    if(userService.isAdministrator(user) || user.equals(projectAdministrationService.getProjectOwner(project.get())))
       return ResponseEntity.ok().build();
 
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Void> updateProject(
+    @PathVariable long id,
+    @AuthenticationPrincipal UserDetails userDetails,
+    @RequestBody ProjectUpdateRequestDTO req
+  ) {
+
+    Optional<Project> optionalProject = projectRepository.findById(id);
+
+    if(!optionalProject.isPresent()) return ResponseEntity.badRequest().build();
+    Project project = optionalProject.get();
+
+    User requiringUser = (User) userDetails;
+
+    boolean isAbleToRequest = projectAdministrationService.administratesProject(requiringUser, project)
+                              || userService.isAdministrator(requiringUser);
+    
+    if(!isAbleToRequest) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+    
+    req.name().ifPresent(project::setName);
+    req.device().ifPresent(device -> project.setDevice(deviceService.validateAndSaveDevice(device)));
+
+    //TODO: change List to Set
+    Set<User> contributors = new HashSet<>();
+    Set<User> administrators = new HashSet<>();
+
+    req.contributors().ifPresent(contributorsId -> 
+      contributors.addAll(userService.getUsersFromId(contributorsId))
+    );
+    req.administrators().ifPresent(administratorsId -> {
+        contributors.addAll(userService.getUsersFromId(administratorsId));
+        administrators.addAll(userService.getUsersFromId(administratorsId));
+      }
+    );
+
+    project.setContributors(new ArrayList<>(contributors));
+    project.setAdministrators(new ArrayList<>(administrators));
+    projectRepository.save(project);
+    
+    return ResponseEntity.ok().build();
   }
 }

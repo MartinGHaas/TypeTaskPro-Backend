@@ -10,14 +10,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.typetaskpro.domain.project.model.Project;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -64,27 +63,17 @@ public class User implements UserDetails{
   @EqualsAndHashCode.Exclude
   private UserRole role;
 
-  @ManyToMany(targetEntity = Project.class, fetch = FetchType.EAGER)
-  @JoinTable(
-    name = "user_administrating_projects",
-    joinColumns = {
-      @JoinColumn(name = "project_id")
-    },
-    inverseJoinColumns = {
-      @JoinColumn(name = "user_id")
-    }
+  @ManyToMany(
+    fetch = FetchType.EAGER,
+    cascade = CascadeType.ALL,
+    mappedBy = "administrators"
   )
   private List<Project> administratingProjects;
   
-  @ManyToMany(targetEntity = Project.class, fetch = FetchType.EAGER)
-  @JoinTable(
-    name = "user_contributing_projects",
-    joinColumns = {
-      @JoinColumn(name = "project_id")
-    },
-    inverseJoinColumns = {
-      @JoinColumn(name = "user_id")
-    }
+  @ManyToMany(
+    fetch = FetchType.EAGER,
+    cascade = CascadeType.ALL,
+    mappedBy = "contributors"
   )
   private List<Project> contributingProjects;
 
