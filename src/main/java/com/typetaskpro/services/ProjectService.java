@@ -1,6 +1,7 @@
 package com.typetaskpro.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class ProjectService {
     ).toList();
   }
 
-  private List<UserResponseDTO> getProjectUsers(List<User> users) {
+  private List<UserResponseDTO> getProjectUsers(Set<User> users) {
     return users.stream().map(user ->
       new UserResponseDTO(user.getId(), user.getUsername())
     ).toList();

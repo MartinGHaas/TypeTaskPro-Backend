@@ -18,6 +18,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -76,6 +77,9 @@ public class User implements UserDetails{
     mappedBy = "contributors"
   )
   private List<Project> contributingProjects;
+
+  @OneToMany(mappedBy = "owner")
+  private List<Project> ownProjects;
 
   public User(String username, String password, UserRole role) {
     this.username = username;

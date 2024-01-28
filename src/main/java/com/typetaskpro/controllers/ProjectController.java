@@ -1,6 +1,5 @@
 package com.typetaskpro.controllers;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -115,7 +114,7 @@ public class ProjectController {
 
     User user = (User) userDetails;
 
-    if(userService.isAdministrator(user) || user.equals(projectAdministrationService.getProjectOwner(project.get())))
+    if(userService.isAdministrator(user) || user.getOwnProjects().contains(project.get()))
       return ResponseEntity.ok().build();
 
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -145,7 +144,6 @@ public class ProjectController {
     req.name().ifPresent(project::setName);
     req.device().ifPresent(device -> project.setDevice(deviceService.validateAndSaveDevice(device)));
 
-    //TODO: change List to Set
     Set<User> contributors = new HashSet<>();
     Set<User> administrators = new HashSet<>();
 
@@ -158,8 +156,8 @@ public class ProjectController {
       }
     );
 
-    project.setContributors(new ArrayList<>(contributors));
-    project.setAdministrators(new ArrayList<>(administrators));
+    project.setContributors(contributors);
+    project.setAdministrators(administrators);
     projectRepository.save(project);
     
     return ResponseEntity.ok().build();

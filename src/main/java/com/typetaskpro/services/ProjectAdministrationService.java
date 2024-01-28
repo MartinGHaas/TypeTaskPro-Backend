@@ -11,8 +11,4 @@ public class ProjectAdministrationService {
   public boolean administratesProject(User user, Project project) {
     return project.getAdministrators().contains(user);
   }
-
-  public User getProjectOwner(Project project) {
-    return project.getAdministrators().get(0);
-  }
 }

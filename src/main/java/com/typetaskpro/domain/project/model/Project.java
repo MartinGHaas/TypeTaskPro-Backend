@@ -1,7 +1,7 @@
 package com.typetaskpro.domain.project.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.typetaskpro.domain.device.model.Device;
 import com.typetaskpro.domain.user.model.User;
@@ -73,7 +73,7 @@ public class Project {
       @JoinColumn(name = "project_id")
     }
   )
-  private List<User> administrators;
+  private Set<User> administrators;
   
   @ManyToMany(
     cascade = CascadeType.ALL,
@@ -88,13 +88,22 @@ public class Project {
       @JoinColumn(name = "project_id")
     }
   )
-  private List<User> contributors;
+  private Set<User> contributors;
+
+  @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(
+    name = "user_id",
+    nullable = false,
+    updatable = true
+  )
+  private User owner;
 
   public Project(String name, Device device, User user) {
     this.name = name;
     this.device = device;
-    this.administrators = new ArrayList<>();
-    this.contributors = new ArrayList<>();
+    this.administrators = new HashSet<>();
+    this.contributors = new HashSet<>();
+    this.owner = user;
 
     this.administrators.add(user);
     this.contributors.add(user);
