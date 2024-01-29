@@ -1,6 +1,5 @@
 package com.typetaskpro.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +22,19 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
   
-  @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
+  private PasswordEncoder passwordEncoder;
+  private UserService userService;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
-
-  @Autowired
-  UserService userService;
+  public AuthController(
+    UserRepository userRepository,
+    PasswordEncoder passwordEncoder,
+    UserService userService
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.userService = userService;
+  }
 
   @PostMapping("/login")
   public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid UserLoginDTO req) {

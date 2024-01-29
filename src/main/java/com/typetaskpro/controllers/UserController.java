@@ -3,7 +3,6 @@ package com.typetaskpro.controllers;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,14 +27,19 @@ import com.typetaskpro.services.UserService;
 @RequestMapping("/users")
 public class UserController {
   
-  @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
+  private TokenService tokenService;
+  private UserService userService;
 
-  @Autowired
-  TokenService tokenService;
-
-  @Autowired
-  UserService userService;
+  public UserController(
+    UserRepository userRepository,
+    TokenService tokenService,
+    UserService userService
+  ) {
+    this.userRepository = userRepository;
+    this.tokenService = tokenService;
+    this.userService = userService;
+  }
 
   @GetMapping
   public ResponseEntity<List<UserResponseDTO>> getAllUsers() {

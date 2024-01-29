@@ -3,7 +3,6 @@ package com.typetaskpro.controllers;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +25,6 @@ import com.typetaskpro.domain.project.dto.ProjectUpdateRequestDTO;
 import com.typetaskpro.domain.project.model.Project;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
-import com.typetaskpro.repository.DeviceRepository;
 import com.typetaskpro.repository.ProjectRepository;
 import com.typetaskpro.repository.UserRepository;
 import com.typetaskpro.services.DeviceService;
@@ -40,26 +38,28 @@ import jakarta.validation.Valid;
 @RequestMapping("/projects")
 public class ProjectController {
   
-  @Autowired
-  ProjectRepository projectRepository;
+  private ProjectRepository projectRepository;
+  private ProjectService projectService;
+  private UserRepository userRepository;
+  private UserService userService;
+  private ProjectAdministrationService projectAdministrationService;
+  private DeviceService deviceService;
 
-  @Autowired 
-  ProjectService projectService;
-
-  @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  DeviceRepository deviceRepository;
-
-  @Autowired
-  UserService userService;
-
-  @Autowired
-  ProjectAdministrationService projectAdministrationService;
-
-  @Autowired
-  DeviceService deviceService;
+  public ProjectController(
+    ProjectRepository projectRepository,
+    ProjectService projectService,
+    UserRepository userRepository,
+    UserService userService,
+    ProjectAdministrationService projectAdministrationService,
+    DeviceService deviceService
+  ) {
+    this.projectRepository = projectRepository;
+    this.projectService = projectService;
+    this.userRepository = userRepository;
+    this.userService = userService;
+    this.projectAdministrationService = projectAdministrationService;
+    this.deviceService = deviceService;
+  }
 
   @GetMapping
   public ResponseEntity<List<ProjectResponseDTO>> getAllProjects(

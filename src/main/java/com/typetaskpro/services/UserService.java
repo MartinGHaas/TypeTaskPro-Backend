@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,15 +20,20 @@ import com.typetaskpro.repository.UserRepository;
 @Service
 public class UserService {
   
-  @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  AuthenticationManager authenticationManager;
-
-  @Autowired
-  TokenService tokenService;
+  private UserRepository userRepository;
+  private AuthenticationManager authenticationManager;
+  private TokenService tokenService;
   
+  public UserService(
+    UserRepository userRepository,
+    AuthenticationManager authenticationManager,
+    TokenService tokenService
+  ) {
+    this.userRepository = userRepository;
+    this.authenticationManager = authenticationManager;
+    this.tokenService = tokenService;
+  }
+
   public boolean usernameAlreadyExists(String username) {
     return userRepository.findByUsername(username) != null;
   }

@@ -2,7 +2,6 @@ package com.typetaskpro.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.typetaskpro.domain.device.dto.DeviceRequestDTO;
@@ -12,8 +11,11 @@ import com.typetaskpro.repository.DeviceRepository;
 @Service
 public class DeviceService {
   
-  @Autowired
-  DeviceRepository deviceRepository;
+  private DeviceRepository deviceRepository;
+
+  public DeviceService(DeviceRepository deviceRepository) {
+    this.deviceRepository = deviceRepository;
+  }
 
   public Device validateAndSaveDevice(DeviceRequestDTO reqDevice) {
     String requestName = reqDevice.name();
