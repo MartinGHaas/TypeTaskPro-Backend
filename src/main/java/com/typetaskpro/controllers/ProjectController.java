@@ -107,16 +107,19 @@ public class ProjectController {
     @AuthenticationPrincipal UserDetails userDetails
   ) {
     
-    Optional<Project> project = projectRepository.findById(id);
-
-    if(!project.isPresent()) return ResponseEntity.badRequest().build();
-
+    Project project = projectRepository.findById(id)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
     User user = (User) userDetails;
-
-    if(userService.isAdministrator(user) || user.getOwnProjects().contains(project.get()))
+  
+    if(userService.isAdministrator(user) || user.getOwnProjects().contains(project)){
+        
+      projectRepository.deleteById(id);
+  
       return ResponseEntity.ok().build();
-
+    }
+  
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+  
   }
 
   @PutMapping("/{id}")
@@ -150,14 +153,13 @@ public class ProjectController {
       req.newAdministrators().ifPresent(administratorsId -> 
         projectService.addAdministrators(project, userService.getUsersFromId(administratorsId))
       );
-      
       req.removeContributors().ifPresent(contributorsId -> 
         projectService.removeContributors(project, userService.getUsersFromId(contributorsId))
       );
       req.removeAdministrators().ifPresent(administratorsId -> 
         projectService.removeContributors(project, userService.getUsersFromId(administratorsId))
       );
-      
+
     } catch(ResponseStatusException responseStatusException) {
       return ResponseEntity.badRequest().build();
     }

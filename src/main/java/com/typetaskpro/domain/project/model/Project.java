@@ -73,6 +73,7 @@ public class Project {
       @JoinColumn(name = "project_id")
     }
   )
+  @ToString.Exclude
   private Set<User> administrators;
   
   @ManyToMany(
@@ -88,14 +89,16 @@ public class Project {
       @JoinColumn(name = "project_id")
     }
   )
+  @ToString.Exclude
   private Set<User> contributors;
 
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(
     name = "user_id",
     nullable = false,
     updatable = true
   )
+  @ToString.Exclude
   private User owner;
 
   public Project(String name, Device device, User user) {

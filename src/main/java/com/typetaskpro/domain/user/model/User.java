@@ -69,6 +69,7 @@ public class User implements UserDetails{
     cascade = CascadeType.ALL,
     mappedBy = "administrators"
   )
+  @ToString.Exclude
   private List<Project> administratingProjects;
   
   @ManyToMany(
@@ -76,9 +77,11 @@ public class User implements UserDetails{
     cascade = CascadeType.ALL,
     mappedBy = "contributors"
   )
+  @ToString.Exclude
   private List<Project> contributingProjects;
 
-  @OneToMany(mappedBy = "owner")
+  @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+  @ToString.Exclude
   private List<Project> ownProjects;
 
   public User(String username, String password, UserRole role) {
