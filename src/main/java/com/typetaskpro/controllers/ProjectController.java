@@ -86,7 +86,7 @@ public class ProjectController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> createrProject(
+  public ResponseEntity<Void> createProject(
     @RequestBody @Valid ProjectRequestDTO req,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
@@ -119,7 +119,6 @@ public class ProjectController {
     }
   
     return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-  
   }
 
   @PutMapping("/{id}")
