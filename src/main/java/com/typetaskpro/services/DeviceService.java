@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.typetaskpro.domain.device.dto.DeviceRequestDTO;
+import com.typetaskpro.domain.device.dto.RequestDeviceDTO;
 import com.typetaskpro.domain.device.model.Device;
 import com.typetaskpro.repository.DeviceRepository;
 
@@ -17,7 +17,7 @@ public class DeviceService {
     this.deviceRepository = deviceRepository;
   }
 
-  public Device validateAndSaveDevice(DeviceRequestDTO reqDevice) {
+  public Device validateAndSaveDevice(RequestDeviceDTO reqDevice) {
     String requestName = reqDevice.name();
 
     Optional<Device> optionalDevice = deviceRepository.findByName(requestName);

@@ -1,4 +1,4 @@
 package com.typetaskpro.domain.device.dto;
 
-public record DeviceRequestDTO(String name) {
+public record RequestDeviceDTO(String name) {
 }
