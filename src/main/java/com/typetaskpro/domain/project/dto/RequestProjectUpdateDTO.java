@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.typetaskpro.domain.device.dto.DeviceRequestDTO;
 
-public record ProjectUpdateRequestDTO(
+public record RequestProjectUpdateDTO(
   Optional<String> name,
   Optional<DeviceRequestDTO> device,
   Optional<List<Long>> newContributors,

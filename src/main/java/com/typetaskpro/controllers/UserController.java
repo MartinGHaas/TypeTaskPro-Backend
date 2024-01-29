@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.typetaskpro.config.security.TokenService;
-import com.typetaskpro.domain.user.dto.PublicUserUpdateDTO;
-import com.typetaskpro.domain.user.dto.TokenResponseDTO;
-import com.typetaskpro.domain.user.dto.UserResponseDTO;
+import com.typetaskpro.domain.user.dto.RequestPublicUserUpdateDTO;
+import com.typetaskpro.domain.user.dto.ResponseTokenDTO;
+import com.typetaskpro.domain.user.dto.ResponseUserDTO;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
@@ -42,31 +42,31 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+  public ResponseEntity<List<ResponseUserDTO>> getAllUsers() {
 
     return ResponseEntity.ok(
       userRepository.findAll().stream()
         .map(user ->
-          new UserResponseDTO(user.getId(), user.getUsername())
+          new ResponseUserDTO(user.getId(), user.getUsername())
         ).toList()
     );
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<UserResponseDTO> getUser(@PathVariable long id) {
+  public ResponseEntity<ResponseUserDTO> getUser(@PathVariable long id) {
     Optional<User> optionalUser = userRepository.findById(id);
 
     if(!optionalUser.isPresent()) return ResponseEntity.notFound().build();
     
     User user = optionalUser.get();
-    return ResponseEntity.ok(new UserResponseDTO(id, user.getUsername()));
+    return ResponseEntity.ok(new ResponseUserDTO(id, user.getUsername()));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<TokenResponseDTO> publicUpdateUser(
+  public ResponseEntity<ResponseTokenDTO> publicUpdateUser(
     @PathVariable long id, 
     @AuthenticationPrincipal UserDetails  user,
-    @RequestBody PublicUserUpdateDTO req
+    @RequestBody RequestPublicUserUpdateDTO req
   ) {
 
     Optional<User> optionalUser = userRepository.findById(id);
@@ -86,7 +86,7 @@ public class UserController {
 
     if(isUserEquals) {
       return ResponseEntity.ok(
-        new TokenResponseDTO(tokenService.generateToken(validUser))
+        new ResponseTokenDTO(tokenService.generateToken(validUser))
       );
     }
 

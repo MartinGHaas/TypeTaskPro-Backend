@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.domain.device.model.Device;
-import com.typetaskpro.domain.project.dto.ProjectRequestDTO;
+import com.typetaskpro.domain.project.dto.RequestProjectDTO;
 import com.typetaskpro.domain.project.dto.ProjectResponseDTO;
-import com.typetaskpro.domain.project.dto.ProjectUpdateRequestDTO;
+import com.typetaskpro.domain.project.dto.RequestProjectUpdateDTO;
 import com.typetaskpro.domain.project.model.Project;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
@@ -87,7 +87,7 @@ public class ProjectController {
 
   @PostMapping
   public ResponseEntity<Void> createProject(
-    @RequestBody @Valid ProjectRequestDTO req,
+    @RequestBody @Valid RequestProjectDTO req,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
 
@@ -125,7 +125,7 @@ public class ProjectController {
   public ResponseEntity<Void> updateProject(
     @PathVariable long id,
     @AuthenticationPrincipal UserDetails userDetails,
-    @RequestBody ProjectUpdateRequestDTO req
+    @RequestBody RequestProjectUpdateDTO req
   ) {
 
     Optional<Project> optionalProject = projectRepository.findById(id);

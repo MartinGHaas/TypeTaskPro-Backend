@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.typetaskpro.domain.device.dto.DeviceDTO;
 import com.typetaskpro.domain.project.dto.ProjectResponseDTO;
 import com.typetaskpro.domain.project.model.Project;
-import com.typetaskpro.domain.user.dto.UserResponseDTO;
+import com.typetaskpro.domain.user.dto.ResponseUserDTO;
 import com.typetaskpro.domain.user.model.User;
 
 @Service
@@ -51,9 +51,9 @@ public class ProjectService {
     ).toList();
   }
 
-  private List<UserResponseDTO> getProjectUsers(Set<User> users) {
+  private List<ResponseUserDTO> getProjectUsers(Set<User> users) {
     return users.stream().map(user ->
-      new UserResponseDTO(user.getId(), user.getUsername())
+      new ResponseUserDTO(user.getId(), user.getUsername())
     ).toList();
   }
 

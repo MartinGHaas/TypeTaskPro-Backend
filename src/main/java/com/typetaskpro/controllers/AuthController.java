@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.typetaskpro.domain.user.dto.TokenResponseDTO;
-import com.typetaskpro.domain.user.dto.UserLoginDTO;
-import com.typetaskpro.domain.user.dto.UserRegisterDTO;
+import com.typetaskpro.domain.user.dto.ResponseTokenDTO;
+import com.typetaskpro.domain.user.dto.LoginUserDTO;
+import com.typetaskpro.domain.user.dto.RegisterUserDTO;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
@@ -37,7 +37,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid UserLoginDTO req) {
+  public ResponseEntity<ResponseTokenDTO> login(@RequestBody @Valid LoginUserDTO req) {
     
     return ResponseEntity.ok(
       userService.validateAndReturnNewToken(
@@ -48,7 +48,7 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<Void> register(@RequestBody @Valid UserRegisterDTO req) {
+  public ResponseEntity<Void> register(@RequestBody @Valid RegisterUserDTO req) {
     
     if(userRepository.findByUsername(req.username()) != null) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.config.security.TokenService;
-import com.typetaskpro.domain.user.dto.TokenResponseDTO;
+import com.typetaskpro.domain.user.dto.ResponseTokenDTO;
 import com.typetaskpro.domain.user.model.User;
 import com.typetaskpro.domain.user.model.UserRole;
 import com.typetaskpro.repository.UserRepository;
@@ -45,14 +45,14 @@ public class UserService {
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
   }
 
-  public TokenResponseDTO validateAndReturnNewToken(String username, String password) {
+  public ResponseTokenDTO validateAndReturnNewToken(String username, String password) {
     
     var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
     Authentication auth = authenticationManager.authenticate(usernamePassword);
 
     var token = tokenService.generateToken((User) auth.getPrincipal());
 
-    return new TokenResponseDTO(token);
+    return new ResponseTokenDTO(token);
   }
 
   public boolean isAdministrator(User user) {
