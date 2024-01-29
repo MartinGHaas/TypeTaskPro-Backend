@@ -39,9 +39,25 @@ git clone git@github.com:MartinGHaas/TypeTaskPro-Backend.git
 *Provided endpoints until now:*
 
 ```
+GET / - Redirects to README.md on GitHub
+
 POST /auth/register - Register a new user into the App
 
 POST /aut/login - Login as a user into the App
+
+GET /users - Provides all users
+
+GET /users/{id} - Provides the user with the Id
+
+PUT /users/{id} - Updates the user with the Id
+
+GET /projects/?userId={long} - Gets the user projects or all projects
+
+POST /projects - Creates a new project
+
+DELETE /projects/{id} - Deletes a project
+
+PUT /projects/{id} - Updates a project
 ```
 
 ### Authentication Roles
