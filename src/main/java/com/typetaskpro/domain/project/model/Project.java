@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.typetaskpro.domain.device.model.Device;
+import com.typetaskpro.domain.task.model.Task;
 import com.typetaskpro.domain.user.model.User;
 
 import jakarta.persistence.CascadeType;
@@ -17,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -59,6 +61,14 @@ public class Project {
     name = "device"
   )
   private Device device;
+
+  @OneToMany(
+    fetch = FetchType.EAGER
+  )
+  @JoinColumn(
+    name = "project_id"
+  )
+  private Set<Task> tasks;
 
   @ManyToMany(
     cascade = CascadeType.ALL,
@@ -104,6 +114,7 @@ public class Project {
   public Project(String name, Device device, User user) {
     this.name = name;
     this.device = device;
+    this.tasks = new HashSet<>();
     this.administrators = new HashSet<>();
     this.contributors = new HashSet<>();
     this.owner = user;

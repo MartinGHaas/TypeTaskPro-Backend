@@ -2,12 +2,15 @@ package com.typetaskpro.services;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.typetaskpro.domain.device.dto.ResponseDeviceDTO;
-import com.typetaskpro.domain.project.dto.RsponseProjectDTO;
+import com.typetaskpro.domain.project.dto.ResponseProjectDTO;
 import com.typetaskpro.domain.project.model.Project;
+import com.typetaskpro.domain.task.dto.ResponseTaskDTO;
+import com.typetaskpro.domain.task.model.Task;
 import com.typetaskpro.domain.user.dto.ResponseUserDTO;
 import com.typetaskpro.domain.user.model.User;
 
@@ -39,16 +42,23 @@ public class ProjectService {
     }
   }
 
-  public List<RsponseProjectDTO> getProjectPublicDTO(List<Project> projects) {
+  public List<ResponseProjectDTO> getProjectPublicDTO(List<Project> projects) {
     return projects.stream().map(project -> 
-      new RsponseProjectDTO(
-        project.getId(),                
+      new ResponseProjectDTO(
+        project.getId(),
         project.getName(),
         getProjectDeviceDTO(project),
+        getTasksDTO(project.getTasks()),
         getProjectUsers(project.getAdministrators()),
         getProjectUsers(project.getContributors())
       )
     ).toList();
+  }
+
+  public Set<ResponseTaskDTO> getTasksDTO(Set<Task> tasks) {
+    return tasks.stream().map(task ->
+      new ResponseTaskDTO(task.getId(), task.getName(), task.getDescription())
+    ).collect(Collectors.toSet());
   }
 
   private List<ResponseUserDTO> getProjectUsers(Set<User> users) {

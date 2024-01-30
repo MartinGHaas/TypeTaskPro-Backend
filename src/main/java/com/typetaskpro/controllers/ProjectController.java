@@ -20,7 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.domain.device.model.Device;
 import com.typetaskpro.domain.project.dto.RequestProjectDTO;
-import com.typetaskpro.domain.project.dto.RsponseProjectDTO;
+import com.typetaskpro.domain.project.dto.ResponseProjectDTO;
 import com.typetaskpro.domain.project.dto.RequestProjectUpdateDTO;
 import com.typetaskpro.domain.project.model.Project;
 import com.typetaskpro.domain.user.model.User;
@@ -62,7 +62,7 @@ public class ProjectController {
   }
 
   @GetMapping
-  public ResponseEntity<List<RsponseProjectDTO>> getAllProjects(
+  public ResponseEntity<List<ResponseProjectDTO>> getAllProjects(
     @RequestParam(value = "userId", defaultValue = "-1") long id,
     @AuthenticationPrincipal UserDetails userDetails
   ) {
