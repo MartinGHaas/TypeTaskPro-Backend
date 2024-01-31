@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.typetaskpro.config.security.TokenService;
-import com.typetaskpro.domain.user.dto.RequestPublicUserUpdateDTO;
-import com.typetaskpro.domain.user.dto.ResponseTokenDTO;
-import com.typetaskpro.domain.user.dto.ResponseUserDTO;
-import com.typetaskpro.domain.user.model.User;
-import com.typetaskpro.domain.user.model.UserRole;
-import com.typetaskpro.repository.UserRepository;
-import com.typetaskpro.services.UserService;
+import com.typetaskpro.application.services.UserService;
+import com.typetaskpro.core.domain.user.dto.RequestPublicUserUpdateDTO;
+import com.typetaskpro.core.domain.user.dto.ResponseTokenDTO;
+import com.typetaskpro.core.domain.user.dto.ResponseUserDTO;
+import com.typetaskpro.core.domain.user.model.User;
+import com.typetaskpro.core.domain.user.model.UserRole;
+import com.typetaskpro.core.repositories.UserRepository;
+import com.typetaskpro.infrastructure.security.TokenService;
 
 @RestController
 @RequestMapping("/users")

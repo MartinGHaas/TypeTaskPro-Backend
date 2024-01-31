@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.typetaskpro.domain.device.model.Device;
-import com.typetaskpro.domain.project.dto.RequestProjectDTO;
-import com.typetaskpro.domain.project.dto.ResponseProjectDTO;
-import com.typetaskpro.domain.project.dto.RequestProjectUpdateDTO;
-import com.typetaskpro.domain.project.model.Project;
-import com.typetaskpro.domain.user.model.User;
-import com.typetaskpro.domain.user.model.UserRole;
-import com.typetaskpro.repository.ProjectRepository;
-import com.typetaskpro.repository.UserRepository;
-import com.typetaskpro.services.DeviceService;
-import com.typetaskpro.services.ProjectAdministrationService;
-import com.typetaskpro.services.ProjectService;
-import com.typetaskpro.services.UserService;
+import com.typetaskpro.application.services.DeviceService;
+import com.typetaskpro.application.services.ProjectAdministrationService;
+import com.typetaskpro.application.services.ProjectService;
+import com.typetaskpro.application.services.UserService;
+import com.typetaskpro.core.domain.device.model.Device;
+import com.typetaskpro.core.domain.project.dto.RequestProjectDTO;
+import com.typetaskpro.core.domain.project.dto.RequestProjectUpdateDTO;
+import com.typetaskpro.core.domain.project.dto.ResponseProjectDTO;
+import com.typetaskpro.core.domain.project.model.Project;
+import com.typetaskpro.core.domain.user.model.User;
+import com.typetaskpro.core.domain.user.model.UserRole;
+import com.typetaskpro.core.repositories.ProjectRepository;
+import com.typetaskpro.core.repositories.UserRepository;
 
 import jakarta.validation.Valid;
 

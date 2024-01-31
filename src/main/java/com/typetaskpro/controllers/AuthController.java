@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.typetaskpro.domain.user.dto.ResponseTokenDTO;
-import com.typetaskpro.domain.user.dto.LoginUserDTO;
-import com.typetaskpro.domain.user.dto.RegisterUserDTO;
-import com.typetaskpro.domain.user.model.User;
-import com.typetaskpro.domain.user.model.UserRole;
-import com.typetaskpro.repository.UserRepository;
-import com.typetaskpro.services.UserService;
+import com.typetaskpro.application.services.UserService;
+import com.typetaskpro.core.domain.user.dto.LoginUserDTO;
+import com.typetaskpro.core.domain.user.dto.RegisterUserDTO;
+import com.typetaskpro.core.domain.user.dto.ResponseTokenDTO;
+import com.typetaskpro.core.domain.user.model.User;
+import com.typetaskpro.core.domain.user.model.UserRole;
+import com.typetaskpro.core.repositories.UserRepository;
 
 import jakarta.validation.Valid;
 

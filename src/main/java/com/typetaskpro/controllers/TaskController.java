@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.typetaskpro.domain.project.model.Project;
-import com.typetaskpro.domain.task.dto.RequestTaskDTO;
-import com.typetaskpro.domain.task.dto.RequestTaskUpdateDTO;
-import com.typetaskpro.domain.task.dto.ResponseTaskDTO;
-import com.typetaskpro.domain.task.model.Task;
-import com.typetaskpro.domain.user.model.User;
-import com.typetaskpro.domain.user.model.UserRole;
-import com.typetaskpro.repository.ProjectRepository;
-import com.typetaskpro.repository.TaskRepository;
-import com.typetaskpro.repository.UserRepository;
-import com.typetaskpro.services.ProjectAdministrationService;
-import com.typetaskpro.services.ProjectService;
+import com.typetaskpro.application.services.ProjectAdministrationService;
+import com.typetaskpro.application.services.ProjectService;
+import com.typetaskpro.core.domain.project.model.Project;
+import com.typetaskpro.core.domain.task.dto.RequestTaskDTO;
+import com.typetaskpro.core.domain.task.dto.RequestTaskUpdateDTO;
+import com.typetaskpro.core.domain.task.dto.ResponseTaskDTO;
+import com.typetaskpro.core.domain.task.model.Task;
+import com.typetaskpro.core.domain.user.model.User;
+import com.typetaskpro.core.domain.user.model.UserRole;
+import com.typetaskpro.core.repositories.ProjectRepository;
+import com.typetaskpro.core.repositories.TaskRepository;
+import com.typetaskpro.core.repositories.UserRepository;
 
 import jakarta.validation.Valid;
 
