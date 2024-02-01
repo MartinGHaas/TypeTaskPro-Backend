@@ -2,7 +2,6 @@ package com.typetaskpro.infrastructure.security;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +19,16 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-  @Autowired
-  UserRepository userRepository;
+  private UserRepository userRepository;
+  private TokenService tokenService;
 
-  @Autowired
-  TokenService tokenService;
+  public SecurityFilter(
+    UserRepository userRepository,
+    TokenService tokenService
+  ) {
+    this.userRepository = userRepository;
+    this.tokenService = tokenService;
+  }
 
   @Override
   protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)

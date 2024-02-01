@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.typetaskpro.core.domain.project.model.Project;
 
 @Repository
-public interface ProjectRepository extends JpaRepository<Project, Long>{
+public interface ProjectRepository extends JpaRepository<Project, Long> {
   
   @Override
   @Modifying
