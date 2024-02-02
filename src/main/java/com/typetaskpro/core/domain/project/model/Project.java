@@ -58,7 +58,7 @@ public class Project {
 
   @ManyToOne
   @JoinColumn(
-    name = "device"
+    name = "device_id"
   )
   private Device device;
 
