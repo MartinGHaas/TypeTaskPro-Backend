@@ -38,8 +38,12 @@ public class Task {
   @Column
   private String description;
 
+  @Column
+  private TaskStatus status;
+
   public Task(String name, String description) {
     this.name = name;
     this.description = description;
+    this.status = TaskStatus.TODO;
   }
 }

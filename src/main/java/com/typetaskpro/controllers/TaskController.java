@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.application.services.ProjectAdministrationService;
-import com.typetaskpro.application.services.ProjectService;
+import com.typetaskpro.application.services.TasksService;
 import com.typetaskpro.core.domain.project.model.Project;
 import com.typetaskpro.core.domain.task.dto.RequestTaskDTO;
 import com.typetaskpro.core.domain.task.dto.RequestTaskUpdateDTO;
@@ -38,22 +38,22 @@ public class TaskController {
   
   private ProjectRepository projectRepository;
   private ProjectAdministrationService projectAdministrationService;
-  private ProjectService projectService;
   private TaskRepository taskRepository;
   private UserRepository userRepository;
+  private TasksService tasksService;
 
   public TaskController(
     ProjectRepository projectRepository,
     ProjectAdministrationService projectAdministrationService,
-    ProjectService projectService,
     TaskRepository taskRepository,
-    UserRepository userRepository
+    UserRepository userRepository,
+    TasksService tasksService
   ) {
     this.projectRepository = projectRepository;
     this.projectAdministrationService = projectAdministrationService;
-    this.projectService = projectService;
     this.taskRepository = taskRepository;
     this.userRepository = userRepository;
+    this.tasksService = tasksService;
   }
 
   @GetMapping("projects/{projectId}/tasks")
@@ -74,7 +74,7 @@ public class TaskController {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    return ResponseEntity.ok(projectService.getTasksDTO(project.getTasks()));
+    return ResponseEntity.ok(tasksService.getTasksDTO(project.getTasks()));
   }
 
   @PostMapping("/projects/{projectId}/tasks")
@@ -107,6 +107,7 @@ public class TaskController {
 
     req.name().ifPresent(task::setName);
     req.description().ifPresent(task::setDescription);
+    req.status().ifPresent(task::setStatus);
 
     taskRepository.save(task);
 
