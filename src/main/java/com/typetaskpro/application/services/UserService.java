@@ -5,33 +5,20 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.typetaskpro.core.domain.user.dto.ResponseTokenDTO;
 import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
-import com.typetaskpro.infrastructure.security.TokenService;
 
 @Service
 public class UserService {
   
   private UserRepository userRepository;
-  private AuthenticationManager authenticationManager;
-  private TokenService tokenService;
   
-  public UserService(
-    UserRepository userRepository,
-    AuthenticationManager authenticationManager,
-    TokenService tokenService
-  ) {
+  public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.authenticationManager = authenticationManager;
-    this.tokenService = tokenService;
   }
 
   public boolean usernameAlreadyExists(String username) {
@@ -43,16 +30,6 @@ public class UserService {
       return new HashSet<>(userRepository.findAllById(userIds));
 
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-  }
-
-  public ResponseTokenDTO validateAndReturnNewToken(String username, String password) {
-    
-    var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
-    Authentication auth = authenticationManager.authenticate(usernamePassword);
-
-    var token = tokenService.generateToken((User) auth.getPrincipal());
-
-    return new ResponseTokenDTO(token);
   }
 
   public boolean isAdministrator(User user) {

@@ -91,7 +91,9 @@ public class ProjectController {
     @AuthenticationPrincipal UserDetails userDetails
   ) {
 
-    User user = userRepository.findUserByUsername(userDetails.getUsername());
+    User user = userRepository.findUserByUsername(userDetails.getUsername())
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+
     Device validDevice = deviceService.validateAndSaveDevice(req.device());
 
     Project project = new Project(req.name(), validDevice, user);

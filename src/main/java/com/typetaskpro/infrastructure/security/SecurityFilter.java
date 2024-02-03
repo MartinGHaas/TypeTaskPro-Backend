@@ -2,12 +2,14 @@ package com.typetaskpro.infrastructure.security;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.core.repositories.UserRepository;
 
@@ -38,7 +40,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     if(token != null) {
       var login = tokenService.validateToken(token);
-      UserDetails user = userRepository.findByUsername(login);
+      UserDetails user = userRepository.findByUsername(login)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
       
       var auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(auth);

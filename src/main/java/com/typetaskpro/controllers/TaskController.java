@@ -67,8 +67,8 @@ public class TaskController {
     
     boolean isAbleToRequest = userRepository
       .findUserByUsername(user.getUsername())
-      .getContributingProjects()
-      .contains(project);
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN))
+      .getContributingProjects().contains(project);
 
     if(!isAbleToRequest) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
