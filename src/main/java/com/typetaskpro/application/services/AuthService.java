@@ -51,7 +51,7 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
     Authentication auth = authenticationManager.get().authenticate(usernamePassword);
 
-    var token = tokenService.generateToken((User) auth.getPrincipal());
+    var token = tokenService.generateToken(((User) auth.getPrincipal()).getUsername());
 
     return new ResponseTokenDTO(token);
   }

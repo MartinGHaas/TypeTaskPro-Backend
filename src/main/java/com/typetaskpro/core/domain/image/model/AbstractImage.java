@@ -1,14 +1,13 @@
-package com.typetaskpro.core.domain.images.model;
+package com.typetaskpro.core.domain.image.model;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,15 +15,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity(name = "images")
-@Table(name = "images")
+@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Image {
+abstract class AbstractImage {
   
   @Id
   @GeneratedValue(
@@ -40,7 +38,7 @@ public class Image {
   )
   private byte[] data;
 
-  public Image(byte[] data) {
+  public AbstractImage(byte[] data) {
     this.data = data;
   }
 }

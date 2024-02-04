@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.typetaskpro.core.domain.image.model.ProfilePictureImage;
 import com.typetaskpro.core.domain.project.model.Project;
 
 import jakarta.persistence.CascadeType;
@@ -17,8 +18,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -83,6 +86,15 @@ public class User implements UserDetails{
   @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
   @ToString.Exclude
   private List<Project> ownProjects;
+
+  @OneToOne(
+    cascade = CascadeType.ALL,
+    fetch = FetchType.LAZY
+  )
+  @JoinColumn(
+    name = "profile_picture_id"
+  )
+  private ProfilePictureImage profilePicture;
 
   public User(String username, String password, UserRole role) {
     this.username = username;
