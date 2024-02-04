@@ -19,13 +19,13 @@ CREATE TABLE devices_image (
 );
 
 ALTER TABLE users
-ADD COLUMN profile_picture_id VARCHAR(36)
-ADD CONSTRAINT FK_Users_Images FOREIGN KEY (profile_picture_id) REFERENCES (profile_pictures);
+ADD COLUMN profile_picture_id VARCHAR(36),
+ADD CONSTRAINT FK_Users_Images FOREIGN KEY (profile_picture_id) REFERENCES profile_pictures;
 
 ALTER TABLE tasks
-ADD COLUMN image_id VARCHAR(36)
-ADD CONSTRAINT FK_Tasks_Images FOREIGN KEY (image_id) REFERENCES (tasks_image);
+ADD COLUMN image_id VARCHAR(36),
+ADD CONSTRAINT FK_Tasks_Images FOREIGN KEY (image_id) REFERENCES tasks_image;
 
 ALTER TABLE devices
-ADD COLUMN image_id VARCHAR(36)
-ADD CONSTRAINT FK_Devices_Images FOREIGN KEY (image_id) REFERENCES (devices_image);
+ADD COLUMN image_id VARCHAR(36),
+ADD CONSTRAINT FK_Devices_Images FOREIGN KEY (image_id) REFERENCES devices_image;
