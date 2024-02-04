@@ -16,4 +16,9 @@ public class ProfilePictureImage extends AbstractImage {
   public ProfilePictureImage(String id, byte[] data) {
     super(id, data);
   }
+
+  @Override
+  public byte[] getData() {
+    return super.getData();
+  }
 }

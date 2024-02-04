@@ -14,28 +14,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.application.services.ImageService;
+import com.typetaskpro.application.services.UserService;
 import com.typetaskpro.core.domain.image.model.DeviceImage;
 import com.typetaskpro.core.domain.image.model.ProfilePictureImage;
 import com.typetaskpro.core.domain.image.model.TaskImage;
-import com.typetaskpro.core.domain.user.model.User;
-import com.typetaskpro.core.repositories.UserRepository;
 
 @RestController
 @RequestMapping("images")
 public class ImageController {
   
   private ImageService imageService;
-  private UserRepository userRepository;
+  private UserService userService;
 
   public ImageController(
     ImageService imageService,
-    UserRepository userRepository
+    UserService userService
   ) {
     this.imageService = imageService;
-    this.userRepository = userRepository;
+    this.userService = userService;
   }
 
   @GetMapping("/profile-picture/{imageId}")
@@ -50,11 +48,7 @@ public class ImageController {
   public ResponseEntity<byte[]> getProfilePicture(
     @PathVariable long userId
   ) {
-
-    User user = userRepository.findById(userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-    return new ResponseEntity<>(user.getProfilePicture().getData(), getImageHeaders(), HttpStatus.OK);
+    return new ResponseEntity<>(userService.getUserProfilePictureData(userId), getImageHeaders(), HttpStatus.OK);
   }
 
   @GetMapping("/device/{imageId}")

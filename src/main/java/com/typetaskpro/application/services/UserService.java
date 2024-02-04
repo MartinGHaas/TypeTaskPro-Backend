@@ -12,6 +12,8 @@ import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class UserService {
   
@@ -34,5 +36,13 @@ public class UserService {
 
   public boolean isAdministrator(User user) {
     return user.getRole() == UserRole.ADMIN;
+  }
+
+  @Transactional
+  public byte[] getUserProfilePictureData(long userId) {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+    return user.getProfilePicture().getData();
   }
 }
