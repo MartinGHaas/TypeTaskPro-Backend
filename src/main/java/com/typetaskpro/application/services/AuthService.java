@@ -1,5 +1,6 @@
 package com.typetaskpro.application.services;
 
+import jakarta.inject.Provider;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,16 +20,16 @@ import com.typetaskpro.core.repositories.UserRepository;
 import com.typetaskpro.infrastructure.security.TokenService;
 
 @Service
-public class AuthService implements UserDetailsService, AuthUseCase{
+public class AuthService implements UserDetailsService, AuthUseCase {
 
   private UserRepository userRepository;
-  private AuthenticationManager authenticationManager;
+  private Provider<AuthenticationManager> authenticationManager;
   private TokenService tokenService;
   private PasswordEncoder passwordEncoder;
 
   public AuthService(
     UserRepository userRepository,
-    AuthenticationManager authenticationManager,
+    Provider<AuthenticationManager> authenticationManager,
     TokenService tokenService,
     PasswordEncoder passwordEncoder
   ) {
@@ -48,7 +49,7 @@ public class AuthService implements UserDetailsService, AuthUseCase{
   public ResponseTokenDTO validateAndReturnNewToken(String username, String password) {
     
     var usernamePassword = new UsernamePasswordAuthenticationToken(username, password);
-    Authentication auth = authenticationManager.authenticate(usernamePassword);
+    Authentication auth = authenticationManager.get().authenticate(usernamePassword);
 
     var token = tokenService.generateToken((User) auth.getPrincipal());
 

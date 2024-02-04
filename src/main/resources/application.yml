@@ -6,7 +6,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/typetaskpro
     username: postgres
     password: password
-  flyway:
+  # flyway:
     # enabled: false
   jpa:
     properties:

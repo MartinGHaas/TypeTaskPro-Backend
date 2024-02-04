@@ -1,6 +1,5 @@
 package com.typetaskpro.infrastructure.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,9 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-  
-  @Autowired
-  SecurityFilter securityFilter;
+
+  private SecurityFilter securityFilter;
+
+  public SecurityConfig(SecurityFilter securityFilter) {
+    this.securityFilter = securityFilter;
+  }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) 
@@ -46,7 +48,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+  AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
