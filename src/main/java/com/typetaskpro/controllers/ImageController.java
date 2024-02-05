@@ -14,26 +14,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.application.services.ImageService;
-import com.typetaskpro.application.services.UserService;
 import com.typetaskpro.core.domain.image.model.DeviceImage;
 import com.typetaskpro.core.domain.image.model.ProfilePictureImage;
 import com.typetaskpro.core.domain.image.model.TaskImage;
+import com.typetaskpro.core.domain.user.model.User;
+import com.typetaskpro.core.repositories.image.DeviceImageRepository;
+import com.typetaskpro.core.repositories.image.ProfilePictureRepository;
+import com.typetaskpro.core.repositories.image.TaskImageRepository;
 
 @RestController
 @RequestMapping("images")
 public class ImageController {
   
   private ImageService imageService;
-  private UserService userService;
+  private ProfilePictureRepository profilePictureRepository;
+  private DeviceImageRepository deviceImageRepository;
+  private TaskImageRepository taskImageRepository;
 
   public ImageController(
     ImageService imageService,
-    UserService userService
+    ProfilePictureRepository profilePictureRepository,
+    DeviceImageRepository deviceImageRepository,
+    TaskImageRepository taskImageRepository
   ) {
     this.imageService = imageService;
-    this.userService = userService;
+    this.profilePictureRepository = profilePictureRepository;
+    this.deviceImageRepository = deviceImageRepository;
+    this.taskImageRepository = taskImageRepository;
   }
 
   @GetMapping("/profile-picture/{imageId}")
@@ -44,14 +54,19 @@ public class ImageController {
     return new ResponseEntity<>(image.getData(), getImageHeaders(), HttpStatus.OK);
   }
 
-  @GetMapping("/profile-picture/user/{userId}")
+  @GetMapping("/user/{userId}")
   public ResponseEntity<byte[]> getProfilePicture(
     @PathVariable long userId
   ) {
-    return new ResponseEntity<>(userService.getUserProfilePictureData(userId), getImageHeaders(), HttpStatus.OK);
+    
+    byte[] data = profilePictureRepository.getProfilePictureByUserId(userId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+      .getData();
+
+    return new ResponseEntity<>(data, getImageHeaders(), HttpStatus.OK);
   }
 
-  @GetMapping("/device/{imageId}")
+  @GetMapping("/device-image/{imageId}")
   public ResponseEntity<byte[]> getDeviceImage(
     @PathVariable @NonNull String imageId
   ) {
@@ -61,14 +76,38 @@ public class ImageController {
     return new ResponseEntity<>(image.getData(), getImageHeaders(), HttpStatus.OK);
   }
 
-  @GetMapping("/tasks/{imageId}")
+  @GetMapping("/device/{deviceId}")
+  public ResponseEntity<byte[]> getDeviceImageByDeviceId(
+    @PathVariable @NonNull String deviceId
+  ) {
+
+    byte[] data = deviceImageRepository.getDeviceImageByDeviceId(deviceId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+      .getData();
+
+    return new ResponseEntity<>(data, getImageHeaders(), HttpStatus.OK);
+  }
+
+  @GetMapping("/tasks-image/{imageId}")
   public ResponseEntity<byte[]> getTaskImage(
     @PathVariable @NonNull String imageId
   ) {
 
     TaskImage image = imageService.getTaskImage(imageId);
-    
+
     return new ResponseEntity<>(image.getData(), getImageHeaders(), HttpStatus.OK);
+  }
+
+  @GetMapping("/task/{taskId}")
+  public ResponseEntity<byte[]> getTaskImageByTaskId(
+    @PathVariable @NonNull String taskId
+  ) {
+
+    byte[] data = taskImageRepository.getTaskImageByTaskId(taskId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
+      .getData();
+    
+    return new ResponseEntity<>(data, getImageHeaders(), HttpStatus.OK);
   }
 
   @PostMapping("/profile-picture/")
@@ -77,7 +116,7 @@ public class ImageController {
     @RequestBody MultipartFile file
   ) {
 
-    imageService.saveProfilePicture(file, userDetails.getUsername());
+    imageService.saveProfilePicture(file, (User) userDetails);
     return ResponseEntity.ok().build();
   }
 

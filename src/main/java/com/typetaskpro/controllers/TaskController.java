@@ -86,7 +86,7 @@ public class TaskController {
     Project project = projectRepository.findById(projectId)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    Task task = new Task(req.name(), req.description());
+    Task task = new Task(req.name(), req.description(), req.limitDateInDT());
     project.getTasks().add(task);
 
     taskRepository.save(task);

@@ -1,16 +1,12 @@
 package com.typetaskpro.core.domain.task.model;
 
-import com.typetaskpro.core.domain.image.model.TaskImage;
+import java.sql.Timestamp;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -47,18 +43,13 @@ public class Task {
   @Column
   private TaskStatus status;
 
-  @OneToOne(
-    cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY
-  )
-  @JoinColumn(
-    name = "image_id"
-  )
-  private TaskImage image;
+  @Column(name = "limit_date")
+  private Timestamp limitDate;
 
-  public Task(String name, String description) {
+  public Task(String name, String description, long limitDateDT) {
     this.name = name;
     this.description = description;
     this.status = TaskStatus.TODO;
+    this.limitDate = new Timestamp(limitDateDT);
   }
 }

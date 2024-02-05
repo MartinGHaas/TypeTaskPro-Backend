@@ -1,6 +1,7 @@
 package com.typetaskpro.core.cases;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.typetaskpro.core.domain.image.model.DeviceImage;
@@ -9,7 +10,7 @@ import com.typetaskpro.core.domain.image.model.TaskImage;
 
 public interface ImageDataUseCase {
 
-  void saveProfilePicture(MultipartFile file, String username);
+  void saveProfilePicture(MultipartFile file, UserDetails user);
 
   void saveDeviceImage(MultipartFile file, @NonNull String deviceId);
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,41 +50,42 @@ public class ImageService implements ImageDataUseCase {
     this.taskImageRepository = taskImageRepository;
   }
 
-  public void saveProfilePicture(MultipartFile file, String username) {
+  public void saveProfilePicture(MultipartFile file, UserDetails userDetails) {
+    User user = userRepository.findUserByUsername(userDetails.getUsername())
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
     try {
-      User user = userRepository.findUserByUsername(username)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-      
-      user.setProfilePicture(new ProfilePictureImage(file.getBytes()));
+      ProfilePictureImage pfp = new ProfilePictureImage(user, file.getBytes());
+      profilePictureRepository.save(pfp);
 
-      userRepository.save(user);
     } catch(IOException e) {
-      throw new ImageServiceException(e.getMessage());
+      throw new RuntimeException();
     }
   }
 
   public void saveDeviceImage(MultipartFile file, @NonNull String deviceId) {
 
-    try {
-
-      Device device = deviceRepository.findById(deviceId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    Device device = deviceRepository.findById(deviceId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
       
-      device.setImage(new DeviceImage(file.getBytes()));
+    try {
+      
+      DeviceImage image = new DeviceImage(device, file.getBytes());
+      deviceImageRepository.save(image);
     } catch(IOException e) {
       throw new ImageServiceException(e.getMessage());
     }
   }
 
   public void saveTaskImage(MultipartFile file, @NonNull String taskId) {
-
-    try {
-
-      Task task = taskRepository.findById(taskId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    
+    Task task = taskRepository.findById(taskId)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
       
-      task.setImage(new TaskImage(file.getBytes()));
+    try {
+      
+      TaskImage image = new TaskImage(task, file.getBytes());
+      taskImageRepository.save(image);
     } catch(IOException e) {
       throw new ImageServiceException(e.getMessage());
     }
