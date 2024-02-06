@@ -28,6 +28,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h1>User Entity</h1>
+ * <br>
+ * <p>This class represents a user entity, and a User in the application system.</p>
+ * <p>It implements UserDetails interface(core Spring's Security interface).</p>
+ */
 @Entity(name = "users")
 @Table(name = "users")
 @NoArgsConstructor
@@ -92,6 +98,12 @@ public class User implements UserDetails{
     this.contributingProjects = new ArrayList<>();
   }
 
+  /**
+   * Get the user's authorities in the application.
+   * Used to grant users and admins different permissions.
+   *
+   * @return a collection of granted authorities.
+   */
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));

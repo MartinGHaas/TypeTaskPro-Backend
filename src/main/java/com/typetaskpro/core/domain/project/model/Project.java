@@ -28,6 +28,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h1>Project Entity</h1>
+ * <p>This class represents a Project entity and table in the application.</p>
+ */
 @Entity(name = "projects")
 @Table(name = "projects")
 @NoArgsConstructor
@@ -119,6 +123,7 @@ public class Project {
     this.contributors = new HashSet<>();
     this.owner = user;
 
+    // Add the owner user in the list of administrators and contributors.
     this.administrators.add(user);
     this.contributors.add(user);
   }

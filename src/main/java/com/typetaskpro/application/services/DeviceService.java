@@ -18,6 +18,16 @@ public class DeviceService implements DeviceUseCase {
     this.deviceRepository = deviceRepository;
   }
 
+  /**
+   * Validates the Device and saves it if
+   * it already doesn't exist. If it exists,
+   * it won't update the database.
+   *
+   * @param reqDevice a request of the Device.
+   * @return an already existing Device in the
+   * database, or it will create a new Device in the database and
+   * return it.
+   */
   public Device validateAndSaveDevice(RequestDeviceDTO reqDevice) {
     String requestName = reqDevice.name();
 

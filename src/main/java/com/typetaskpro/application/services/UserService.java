@@ -22,10 +22,21 @@ public class UserService implements UserUseCase {
     this.userRepository = userRepository;
   }
 
+  /**
+   * Checks if a username already exists in the database.
+   *
+   * @param username of the user.
+   */
   public boolean usernameAlreadyExists(String username) {
-    return userRepository.findByUsername(username) != null;
+    return userRepository.findByUsername(username).isPresent();
   }
 
+  /**
+   * Get a set of users by a list of user's ids.
+   *
+   * @param userIds is a list of user's ids.
+   * @return a set of users related to the list of user's ids.
+   */
   public Set<User> getUsersFromId(List<Long> userIds) {
     if(userIds != null && !userIds.contains(null))
       return new HashSet<>(userRepository.findAllById(userIds));
@@ -33,6 +44,12 @@ public class UserService implements UserUseCase {
     throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * Checks if a user is an administrator in
+   * the application.
+   *
+   * @param user to check if is an administrator.
+   */
   public boolean isAdministrator(User user) {
     return user.getRole() == UserRole.ADMIN;
   }

@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h1>Device Entity</h1>
+ * <p>This class represents a Device entity and table in the application.</p>
+ */
 @Entity(name = "devices")
 @Table(name = "devices")
 @AllArgsConstructor

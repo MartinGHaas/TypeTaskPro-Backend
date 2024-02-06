@@ -15,6 +15,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h1>Task Entity</h1>
+ * <p>This class represents a Task entity and table in the application.</p>
+ */
 @Entity(name = "tasks")
 @Table(name = "tasks")
 @NoArgsConstructor
@@ -24,7 +28,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Task {
-  
+
   @Id
   @GeneratedValue(
     strategy = GenerationType.UUID

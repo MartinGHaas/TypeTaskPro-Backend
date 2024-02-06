@@ -13,6 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * <h1>Profile Picture Entity</h1>
+ * <p>This class represents a user profile picture entity
+ * and table in the application.</p>
+ */
 @Entity(name = "profile_pictures")
 @Table(name = "profile_pictures")
 @Getter

@@ -39,12 +39,24 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     this.passwordEncoder = passwordEncoder;
   }
 
+  /**
+   * @param username the username identifying the user whose data is required.
+   * @return UserDetails object.
+   * @throws UsernameNotFoundException if the username wasn't found.
+   */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return userRepository.findByUsername(username)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
   }
 
+  /**
+   * Validates username and password and returns a new JWT Token.
+   *
+   * @param username of the User.
+   * @param password of the User.
+   * @return the JWT Token as a ResponseTokenDTO.
+   */
   @Override
   public ResponseTokenDTO validateAndReturnNewToken(String username, String password) {
     
@@ -56,6 +68,13 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     return new ResponseTokenDTO(token);
   }
 
+  /**
+   * Register a new user in the application database.
+   *
+   * @param username of the User.
+   * @param password not encrypted of the User.
+   * @param role the User Role or null.
+   */
   @Override
   public void registerNewUser(String username, String password, UserRole role) {
     
@@ -66,6 +85,13 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     );
   }
 
+  /**
+   * Validates the existence of a user role or defines
+   * a 'User' role as default.
+   *
+   * @param role UserRole object to be validated.
+   * @return role if present or a 'User' role as default.
+   */
   private UserRole validateRoleOrDefault(UserRole role) {
     return role == null ? UserRole.USER : role;
   }

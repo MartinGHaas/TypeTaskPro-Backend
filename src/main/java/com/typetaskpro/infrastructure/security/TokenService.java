@@ -19,6 +19,12 @@ public class TokenService {
   private Dotenv dotenv = Dotenv.load();
   private String jwtSecret = dotenv.get("JWT_SECRET");
 
+  /**
+   * Generates a new JWT Token.
+   *
+   * @param username for creating a new JWT Token.
+   * @return a new JWT authenticated token.
+   */
   public String generateToken(String username) {
     
     try {
@@ -34,6 +40,12 @@ public class TokenService {
     }
   }
 
+  /**
+   * Validates JWT Token.
+   *
+   * @param token to be validated by the method.
+   * @return username or a empty String.
+   */
   public String validateToken(String token) {
     
     try {
@@ -48,6 +60,11 @@ public class TokenService {
     }
   }
 
+  /**
+   * Generates JWT Token expiration date.
+   *
+   * @return the expiration date for the JWT Token.
+   */
   private Instant generateExpirationDate() {
     return LocalDateTime.now()
                     .plusMonths(1)

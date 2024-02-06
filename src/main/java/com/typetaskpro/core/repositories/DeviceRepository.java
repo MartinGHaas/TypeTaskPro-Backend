@@ -9,6 +9,14 @@ import com.typetaskpro.core.domain.device.model.Device;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, String> {
-  
+
+  /**
+   * Is used to find a Device object
+   * by its name in the application database.
+   *
+   * @param name of the object to be found on the database.
+   * @return Optional object containing the Device object if found
+   * or an empty Optional object.
+   */
   public Optional<Device> findByName(String name);
 }

@@ -15,6 +15,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h1>Abstract Image</h1>
+ * <p>Created to have the default image data in the application.</p>
+ * <p>All images in the application should extend this class.</p>
+ */
 @MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor

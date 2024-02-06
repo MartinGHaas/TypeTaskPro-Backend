@@ -13,6 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * <h1>Task Image Entity</h1>
+ * <p>This class represents a task image entity and table in the application.</p>
+ */
 @Entity(name = "tasks_image")
 @Table(name = "tasks_image")
 @Getter

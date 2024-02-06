@@ -10,6 +10,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
+/**
+ * <h1>Device Image Entity</h1>
+ * <p>This class represents a device image entity and table in the application.</p>
+ */
 @Entity(name = "devices_image")
 @Table(name = "devices_image")
 @NoArgsConstructor

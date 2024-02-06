@@ -23,6 +23,14 @@ public class SecurityConfig {
     this.securityFilter = securityFilter;
   }
 
+  /**
+   * Configures a security filter chain for the application.
+   *
+   * @param httpSecurity allows configuring web based security for specific http requests
+   *                     and paths.
+   * @return a SecurityFilterChain instance to apply security configurations.
+   * @throws Exception if an exception occurs.
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) 
     throws Exception {
@@ -47,11 +55,24 @@ public class SecurityConfig {
       .build();
   }
 
+  /**
+   * Creates a bean with AuthenticationManager type.
+   *
+   * @param authenticationConfiguration is a AuthenticationConfiguration instance which contains
+   *                                    authentication configuration.
+   * @return an instance of AuthenticationManager.
+   * @throws Exception if an exception occurs.
+   */
   @Bean
   AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
 
+  /**
+   * Creates a bean with PasswordEncoder type.
+   *
+   * @return BCryptPasswordEncoder instance as PasswordEncoder.
+   */
   @Bean
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
