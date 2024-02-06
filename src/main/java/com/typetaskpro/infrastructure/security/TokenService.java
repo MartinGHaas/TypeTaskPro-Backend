@@ -16,8 +16,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 @Service
 public class TokenService {
   
-  private Dotenv dotenv = Dotenv.load();
-  private String jwtSecret = dotenv.get("JWT_SECRET");
+  private final Dotenv dotenv = Dotenv.load();
+  private final String jwtSecret = dotenv.get("JWT_SECRET");
 
   /**
    * Generates a new JWT Token.
@@ -44,7 +44,7 @@ public class TokenService {
    * Validates JWT Token.
    *
    * @param token to be validated by the method.
-   * @return username or a empty String.
+   * @return username or an empty String.
    */
   public String validateToken(String token) {
     

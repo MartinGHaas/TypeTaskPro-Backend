@@ -29,10 +29,10 @@ import com.typetaskpro.core.repositories.image.TaskImageRepository;
 @RequestMapping("images")
 public class ImageController {
   
-  private ImageService imageService;
-  private ProfilePictureRepository profilePictureRepository;
-  private DeviceImageRepository deviceImageRepository;
-  private TaskImageRepository taskImageRepository;
+  private final ImageService imageService;
+  private final ProfilePictureRepository profilePictureRepository;
+  private final DeviceImageRepository deviceImageRepository;
+  private final TaskImageRepository taskImageRepository;
 
   public ImageController(
     ImageService imageService,

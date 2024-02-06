@@ -27,12 +27,12 @@ import com.typetaskpro.core.repositories.image.TaskImageRepository;
 @Service
 public class ImageService implements ImageDataUseCase {
 
-  private UserRepository userRepository;
-  private ProfilePictureRepository profilePictureRepository;
-  private DeviceRepository deviceRepository;
-  private DeviceImageRepository deviceImageRepository;
-  private TaskRepository taskRepository;
-  private TaskImageRepository taskImageRepository;
+  private final UserRepository userRepository;
+  private final ProfilePictureRepository profilePictureRepository;
+  private final DeviceRepository deviceRepository;
+  private final DeviceImageRepository deviceImageRepository;
+  private final TaskRepository taskRepository;
+  private final TaskImageRepository taskImageRepository;
 
   public ImageService(
     UserRepository userRepository,

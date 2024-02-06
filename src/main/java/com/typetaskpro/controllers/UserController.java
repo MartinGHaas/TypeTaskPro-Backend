@@ -27,9 +27,9 @@ import com.typetaskpro.infrastructure.security.TokenService;
 @RequestMapping("/users")
 public class UserController {
   
-  private UserRepository userRepository;
-  private TokenService tokenService;
-  private UserService userService;
+  private final UserRepository userRepository;
+  private final TokenService tokenService;
+  private final UserService userService;
 
   public UserController(
     UserRepository userRepository,

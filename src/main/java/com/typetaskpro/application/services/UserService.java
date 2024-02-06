@@ -16,7 +16,7 @@ import com.typetaskpro.core.repositories.UserRepository;
 @Service
 public class UserService implements UserUseCase {
 
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
   
   public UserService(UserRepository userRepository) {
     this.userRepository = userRepository;

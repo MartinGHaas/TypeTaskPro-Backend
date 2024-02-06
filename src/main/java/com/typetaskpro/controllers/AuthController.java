@@ -20,8 +20,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 public class AuthController {
   
-  private UserRepository userRepository;
-  private AuthService authService;
+  private final UserRepository userRepository;
+  private final AuthService authService;
 
   public AuthController(
     UserRepository userRepository,

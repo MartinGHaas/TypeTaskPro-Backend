@@ -12,7 +12,7 @@ import com.typetaskpro.core.repositories.DeviceRepository;
 @Service
 public class DeviceService implements DeviceUseCase {
   
-  private DeviceRepository deviceRepository;
+  private final DeviceRepository deviceRepository;
 
   public DeviceService(DeviceRepository deviceRepository) {
     this.deviceRepository = deviceRepository;

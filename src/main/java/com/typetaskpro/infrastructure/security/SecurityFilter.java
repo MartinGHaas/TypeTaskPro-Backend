@@ -21,8 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-  private UserRepository userRepository;
-  private TokenService tokenService;
+  private final UserRepository userRepository;
+  private final TokenService tokenService;
 
   public SecurityFilter(
     UserRepository userRepository,

@@ -36,11 +36,11 @@ import jakarta.validation.Valid;
 @RequestMapping
 public class TaskController {
   
-  private ProjectRepository projectRepository;
-  private ProjectAdministrationService projectAdministrationService;
-  private TaskRepository taskRepository;
-  private UserRepository userRepository;
-  private TasksService tasksService;
+  private final ProjectRepository projectRepository;
+  private final ProjectAdministrationService projectAdministrationService;
+  private final TaskRepository taskRepository;
+  private final UserRepository userRepository;
+  private final TasksService tasksService;
 
   public TaskController(
     ProjectRepository projectRepository,

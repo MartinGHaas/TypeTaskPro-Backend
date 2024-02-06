@@ -15,7 +15,7 @@ import com.typetaskpro.core.domain.user.model.User;
 @Service
 public class ProjectService implements ProjectUseCase {
 
-  private TasksService tasksService;
+  private final TasksService tasksService;
   
   public ProjectService(TasksService tasksService) {
     this.tasksService = tasksService;

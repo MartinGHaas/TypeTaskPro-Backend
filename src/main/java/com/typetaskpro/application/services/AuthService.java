@@ -22,10 +22,10 @@ import com.typetaskpro.infrastructure.security.TokenService;
 @Service
 public class AuthService implements UserDetailsService, AuthUseCase {
 
-  private UserRepository userRepository;
-  private Provider<AuthenticationManager> authenticationManager;
-  private TokenService tokenService;
-  private PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final Provider<AuthenticationManager> authenticationManager;
+  private final TokenService tokenService;
+  private final PasswordEncoder passwordEncoder;
 
   public AuthService(
     UserRepository userRepository,

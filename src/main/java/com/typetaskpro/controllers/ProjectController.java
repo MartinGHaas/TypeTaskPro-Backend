@@ -38,12 +38,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/projects")
 public class ProjectController {
   
-  private ProjectRepository projectRepository;
-  private ProjectService projectService;
-  private UserRepository userRepository;
-  private UserService userService;
-  private ProjectAdministrationService projectAdministrationService;
-  private DeviceService deviceService;
+  private final ProjectRepository projectRepository;
+  private final ProjectService projectService;
+  private final UserRepository userRepository;
+  private final UserService userService;
+  private final ProjectAdministrationService projectAdministrationService;
+  private final DeviceService deviceService;
 
   public ProjectController(
     ProjectRepository projectRepository,
