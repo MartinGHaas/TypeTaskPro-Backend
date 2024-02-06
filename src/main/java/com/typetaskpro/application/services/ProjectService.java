@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.typetaskpro.core.cases.ProjectUseCase;
 import com.typetaskpro.core.domain.device.dto.ResponseDeviceDTO;
 import com.typetaskpro.core.domain.project.dto.ResponseProjectDTO;
 import com.typetaskpro.core.domain.project.model.Project;
@@ -12,7 +13,7 @@ import com.typetaskpro.core.domain.user.dto.ResponseUserDTO;
 import com.typetaskpro.core.domain.user.model.User;
 
 @Service
-public class ProjectService {
+public class ProjectService implements ProjectUseCase {
 
   private TasksService tasksService;
   

@@ -4,12 +4,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.typetaskpro.core.cases.DeviceUseCase;
 import com.typetaskpro.core.domain.device.dto.RequestDeviceDTO;
 import com.typetaskpro.core.domain.device.model.Device;
 import com.typetaskpro.core.repositories.DeviceRepository;
 
 @Service
-public class DeviceService {
+public class DeviceService implements DeviceUseCase {
   
   private DeviceRepository deviceRepository;
 

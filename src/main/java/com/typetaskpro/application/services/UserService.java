@@ -8,13 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.typetaskpro.core.cases.UserUseCase;
 import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
 
 @Service
-public class UserService {
-  
+public class UserService implements UserUseCase {
+
   private UserRepository userRepository;
   
   public UserService(UserRepository userRepository) {
