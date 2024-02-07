@@ -43,7 +43,7 @@ GET / - Redirects to README.md on GitHub
 
 POST /auth/register - Register a new user into the App
 
-POST /aut/login - Login as a user into the App
+POST /auth/login - Login as a user into the App
 
 GET /users - Provides all users
 
