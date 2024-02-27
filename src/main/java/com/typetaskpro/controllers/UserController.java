@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.typetaskpro.application.services.UserService;
 import com.typetaskpro.core.domain.user.dto.RequestPublicUserUpdateDTO;
 import com.typetaskpro.core.domain.user.dto.ResponseTokenDTO;
 import com.typetaskpro.core.domain.user.dto.ResponseUserDTO;
+import com.typetaskpro.core.domain.user.dto.ResponseUserDataDTO;
 import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
@@ -91,5 +93,27 @@ public class UserController {
     }
 
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{id}/data")
+  public ResponseEntity<ResponseUserDataDTO> getUserData(
+    @AuthenticationPrincipal UserDetails userDetails,
+    @PathVariable long id
+  ) {
+
+    User user = userRepository.findUserByUsername(userDetails.getUsername())
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+    
+    User idUser = userRepository.findById(id)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+    if(!userService.isAdministrator(user)) {
+
+      if(!user.equals(idUser)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+      }
+    }
+
+    return ResponseEntity.ok(userService.getUserDataDTO(idUser));
   }
 }

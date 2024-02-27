@@ -53,6 +53,8 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.POST, "/projects").authenticated()
         .requestMatchers(HttpMethod.DELETE, "/projects/{id}").authenticated()
         .requestMatchers(HttpMethod.PUT, "/projects/{id}").authenticated()
+        .requestMatchers(HttpMethod.GET, "/metadata/**").authenticated()
+        .requestMatchers(HttpMethod.PUT, "/metadata/**").authenticated()
         .anyRequest().permitAll()
       )
       .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

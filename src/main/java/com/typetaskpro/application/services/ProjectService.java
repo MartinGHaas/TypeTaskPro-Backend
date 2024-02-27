@@ -56,13 +56,13 @@ public class ProjectService implements ProjectUseCase {
     ).toList();
   }
 
-  private List<ResponseUserDTO> getProjectUsers(Set<User> users) {
+  protected List<ResponseUserDTO> getProjectUsers(Set<User> users) {
     return users.stream().map(user ->
       new ResponseUserDTO(user.getId(), user.getUsername())
     ).toList();
   }
 
-  private ResponseDeviceDTO getProjectDeviceDTO(Project project) {
+  protected ResponseDeviceDTO getProjectDeviceDTO(Project project) {
     return new ResponseDeviceDTO(
       project.getDevice().getId(),
       project.getDevice().getName()

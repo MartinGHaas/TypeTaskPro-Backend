@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.core.cases.UserUseCase;
+import com.typetaskpro.core.domain.user.dto.ResponseUserDataDTO;
 import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
@@ -17,9 +18,14 @@ import com.typetaskpro.core.repositories.UserRepository;
 public class UserService implements UserUseCase {
 
   private final UserRepository userRepository;
+  private final ProjectService projectService;
   
-  public UserService(UserRepository userRepository) {
+  public UserService(
+    UserRepository userRepository,
+    ProjectService projectService
+  ) {
     this.userRepository = userRepository;
+    this.projectService = projectService;
   }
 
   /**
@@ -52,5 +58,16 @@ public class UserService implements UserUseCase {
    */
   public boolean isAdministrator(User user) {
     return user.getRole() == UserRole.ADMIN;
+  }
+
+  public ResponseUserDataDTO getUserDataDTO(User user) {
+    return new ResponseUserDataDTO(
+      user.getUsername(),
+      user.getRole(),
+      projectService.getProjectPublicDTO(user.getAdministratingProjects()),
+      projectService.getProjectPublicDTO(user.getContributingProjects()),
+      projectService.getProjectPublicDTO(user.getOwnProjects()),
+      user.getMetadata()
+    );
   }
 }
