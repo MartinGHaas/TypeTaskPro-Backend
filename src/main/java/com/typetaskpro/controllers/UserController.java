@@ -88,7 +88,12 @@ public class UserController {
 
     if(isUserEquals) {
       return ResponseEntity.ok(
-        new ResponseTokenDTO(tokenService.generateToken(validUser.getUsername()))
+        new ResponseTokenDTO(
+          tokenService.generateToken(
+            validUser.getUsername(),
+            validUser.getId()
+          )
+        )
       );
     }
 

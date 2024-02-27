@@ -25,13 +25,14 @@ public class TokenService {
    * @param username for creating a new JWT Token.
    * @return a new JWT authenticated token.
    */
-  public String generateToken(String username) {
+  public String generateToken(String username, long id) {
     
     try {
       Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
       String token = JWT.create()
                         .withIssuer("auth-api")
                         .withSubject(username)
+                        .withClaim("uid", id)
                         .withExpiresAt(generateExpirationDate())
                         .sign(algorithm);
       return token;
