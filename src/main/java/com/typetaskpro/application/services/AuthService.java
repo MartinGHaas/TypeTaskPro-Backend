@@ -81,13 +81,22 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     
     String encryptedPassword = passwordEncoder.encode(password);
     
-    // Trash way to solve a problem.
-    // TODO: improve this code
+    // Create user
     User user = new User(username, encryptedPassword, validateRoleOrDefault(role));
+
+    // Saves this user(now user has a unique Id)
     userRepository.save(user);
+
+    // Creates the metadata
     UserMetadata metadata = new UserMetadata(user.getId());
+
+    // Sets the user metadata
     user.setMetadata(metadata);
+
+    // Saves the user with the new metadata
     userRepository.save(user);
+
+    // * documentation is for shitty code like this
   }
 
   /**

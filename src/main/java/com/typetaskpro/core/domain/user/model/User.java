@@ -107,8 +107,6 @@ public class User implements UserDetails{
     this.administratingProjects = new ArrayList<>();
     this.contributingProjects = new ArrayList<>();
   }
-  
-  // forget it! I hate PostPersist
 
   /**
    * Get the user's authorities in the application.
