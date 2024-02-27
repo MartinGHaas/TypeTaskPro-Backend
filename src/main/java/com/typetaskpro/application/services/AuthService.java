@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.typetaskpro.core.cases.AuthUseCase;
 import com.typetaskpro.core.domain.user.dto.ResponseTokenDTO;
+import com.typetaskpro.core.domain.user.metadata.UserMetadata;
 import com.typetaskpro.core.domain.user.model.User;
 import com.typetaskpro.core.domain.user.model.UserRole;
 import com.typetaskpro.core.repositories.UserRepository;
@@ -80,9 +81,13 @@ public class AuthService implements UserDetailsService, AuthUseCase {
     
     String encryptedPassword = passwordEncoder.encode(password);
     
-    userRepository.save(
-      new User(username, encryptedPassword, validateRoleOrDefault(role))
-    );
+    // Trash way to solve a problem.
+    // TODO: improve this code
+    User user = new User(username, encryptedPassword, validateRoleOrDefault(role));
+    userRepository.save(user);
+    UserMetadata metadata = new UserMetadata(user.getId());
+    user.setMetadata(metadata);
+    userRepository.save(user);
   }
 
   /**

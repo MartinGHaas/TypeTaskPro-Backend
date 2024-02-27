@@ -22,7 +22,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PostPersist;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -108,41 +107,9 @@ public class User implements UserDetails{
     this.administratingProjects = new ArrayList<>();
     this.contributingProjects = new ArrayList<>();
   }
-
-  /**
-   * <h3>The metadata must be created after the persistence
-   * of the User!</h3>
-   * 
-   * <h4>Why?</h4>
-   * <p>If you attempt to create the metadata  in the user's
-   * constructor, the id of the metadata will always be 0.</p>
-   * 
-   * <p>This is due to how spring-data-JPA interacts with the application.</p>
-   * 
-   * <p>The classes you get will always be relative to the content you
-   * have in the database, so, if you create a new User, at least in
-   * this application, the database will be responsible to create the
-   * id of this user. <b>So imagine:</b></p>
-   * 
-   * <i>If the database is responsible to create the id, how can I
-   * determine the Id of the user before its initialization?</i>
-   * 
-   * <p>This is why I use PostPersist in here. It <b>MUST</b>
-   * to be initialized after the after the data is persisted in the database</p>
-   * 
-   * <p><i>Post comments: I don't really like to document code, and I
-   * don't consider this to be ‘documentation’, but I really liked
-   * PostPersist. Mainly because I wasn't aware of it before, so I thougth
-   * it would be nice for people understand better why this is here!
-   * Hope you understood!</i></p>
-   * 
-   * <p><i><b>if I'm wrong, correct me please!</b></i></p>
-   */
-  @PostPersist
-  public void initMetadata() {
-    this.metadata = new UserMetadata(this.id);
-  }
   
+  // forget it! I hate PostPersist
+
   /**
    * Get the user's authorities in the application.
    * Used to grant users and admins different permissions.
