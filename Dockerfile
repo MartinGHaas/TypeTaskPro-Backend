@@ -1,7 +1,7 @@
 FROM ubuntu:latest AS build
 
 RUN apt-get update
-RUN apt install openjdk-21-jre -y
+RUN apt install openjdk-21-jdk -y
 COPY . .
 
 RUN apt install maven -y
