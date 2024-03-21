@@ -1,5 +1,7 @@
 package com.typetaskpro.core.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +13,8 @@ import com.typetaskpro.core.domain.project.model.Project;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
+  Optional<Project> getProjectByName(String projectName);
 
   /**
    * Delete a project and all its references.

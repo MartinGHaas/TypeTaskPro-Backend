@@ -17,5 +17,7 @@ public interface ProjectUseCase {
 
   void removeAdministrators(Project project, Set<User> users);
 
-  List<ResponseProjectDTO> getProjectPublicDTO(List<Project> projects);
+  List<ResponseProjectDTO> getProjectsPublicDTO(List<Project> projects);
+
+  ResponseProjectDTO getProjectPublicDTO(Project project);
 }

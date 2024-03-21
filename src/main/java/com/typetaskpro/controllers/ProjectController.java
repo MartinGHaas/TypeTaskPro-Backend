@@ -74,16 +74,38 @@ public class ProjectController {
       if(user.getRole() == UserRole.ADMIN) {
 
         return ResponseEntity.ok(
-          projectService.getProjectPublicDTO(projectRepository.findAll())
+          projectService.getProjectsPublicDTO(projectRepository.findAll())
         );
       }
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     };
 
-    return ResponseEntity.ok(projectService.getProjectPublicDTO(
+    return ResponseEntity.ok(projectService.getProjectsPublicDTO(
       user.getContributingProjects()
     ));
   }
+
+  @GetMapping("/{name}")
+  public ResponseEntity<ResponseProjectDTO> getSingleProject(
+    @PathVariable String name,
+    @AuthenticationPrincipal UserDetails userDetails
+  ) {
+    Project project = projectRepository.getProjectByName(name)
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    
+    User user = userRepository.findUserByUsername(userDetails.getUsername())
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
+      
+    if(
+      projectAdministrationService.contributesToProject(user, project)
+      || userService.isAdministrator(user)
+    ) {
+      return ResponseEntity.ok(projectService.getProjectPublicDTO(project));
+    };
+
+    throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+  }
+
 
   @PostMapping
   public ResponseEntity<Void> createProject(

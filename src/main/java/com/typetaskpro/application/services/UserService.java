@@ -64,9 +64,9 @@ public class UserService implements UserUseCase {
     return new ResponseUserDataDTO(
       user.getUsername(),
       user.getRole(),
-      projectService.getProjectPublicDTO(user.getAdministratingProjects()),
-      projectService.getProjectPublicDTO(user.getContributingProjects()),
-      projectService.getProjectPublicDTO(user.getOwnProjects()),
+      projectService.getProjectsPublicDTO(user.getAdministratingProjects()),
+      projectService.getProjectsPublicDTO(user.getContributingProjects()),
+      projectService.getProjectsPublicDTO(user.getOwnProjects()),
       user.getMetadata()
     );
   }

@@ -18,4 +18,8 @@ public class ProjectAdministrationService implements ProjectAdministrationUseCas
   public boolean administratesProject(User user, Project project) {
     return project.getAdministrators().contains(user);
   }
+
+  public boolean contributesToProject(User user, Project project) {
+    return project.getContributors().contains(user);
+  }
 }

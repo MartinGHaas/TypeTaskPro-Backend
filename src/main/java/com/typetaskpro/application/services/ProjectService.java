@@ -43,17 +43,21 @@ public class ProjectService implements ProjectUseCase {
     }
   }
 
-  public List<ResponseProjectDTO> getProjectPublicDTO(List<Project> projects) {
+  public List<ResponseProjectDTO> getProjectsPublicDTO(List<Project> projects) {
     return projects.stream().map(project -> 
-      new ResponseProjectDTO(
-        project.getId(),
-        project.getName(),
-        getProjectDeviceDTO(project),
-        tasksService.getTasksDTO(project.getTasks()),
-        getProjectUsers(project.getAdministrators()),
-        getProjectUsers(project.getContributors())
-      )
+      getProjectPublicDTO(project)
     ).toList();
+  }
+
+  public ResponseProjectDTO getProjectPublicDTO(Project project) {
+    return new ResponseProjectDTO(
+      project.getId(),
+      project.getName(),
+      getProjectDeviceDTO(project),
+      tasksService.getTasksDTO(project.getTasks()),
+      getProjectUsers(project.getAdministrators()),
+      getProjectUsers(project.getContributors())
+    );
   }
 
   protected List<ResponseUserDTO> getProjectUsers(Set<User> users) {

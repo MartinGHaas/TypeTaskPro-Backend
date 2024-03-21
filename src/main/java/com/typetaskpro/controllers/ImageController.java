@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -122,9 +123,13 @@ public class ImageController {
 
   @PostMapping("/device/")
   public ResponseEntity<Void> uploadDeviceImage(
-    @RequestBody @NonNull String deviceId,
-    @RequestBody MultipartFile file
+    @RequestParam("deviceId") String deviceId,
+    @RequestParam("file") MultipartFile file
   ) {
+
+    if(deviceId == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
 
     imageService.saveDeviceImage(file, deviceId);
     return ResponseEntity.ok().build();
@@ -132,9 +137,13 @@ public class ImageController {
 
   @PostMapping("/task/")
   public ResponseEntity<Void> uploadTaskImage(
-    @RequestBody @NonNull String taskId,
-    @RequestBody MultipartFile file
+    @RequestParam String taskId,
+    @RequestParam MultipartFile file
   ) {
+
+    if(taskId == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
 
     imageService.saveTaskImage(file, taskId);
     return ResponseEntity.ok().build();
