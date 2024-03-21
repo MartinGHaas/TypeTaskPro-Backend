@@ -7,7 +7,7 @@ COPY . .
 RUN apt install maven -y
 RUN mvn clean install
 
-FROM opendk:21-jdk
+FROM eclipse-temurin:21
 EXPOSE 8080
 COPY --from=build ./target/typetask-0.0.1-SNAPSHOT.jar app.jar
 
