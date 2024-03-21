@@ -11,13 +11,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class TokenService {
   
-  private final Dotenv dotenv = Dotenv.load();
-  private final String jwtSecret = dotenv.get("JWT_SECRET");
+  private final String jwtSecret = System.getenv("JWT_SECRET");
 
   /**
    * Generates a new JWT Token.
@@ -30,7 +28,7 @@ public class TokenService {
     try {
       Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
       String token = JWT.create()
-                        .withIssuer("auth-api")
+                        .withIssuer("typetask-auth")
                         .withSubject(username)
                         .withClaim("uid", id)
                         .withExpiresAt(generateExpirationDate())
@@ -52,7 +50,7 @@ public class TokenService {
     try {
       Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
       return JWT.require(algorithm)
-                .withIssuer("auth-api")
+                .withIssuer("typetask-auth")
                 .build()
                 .verify(token)
                 .getSubject();
